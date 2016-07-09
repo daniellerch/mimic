@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<aiml version="1.0.1" encoding="UTF-8"> 
+
+<!--
+   Patrones típicos que pueden contestarse tambien con frases típicas.
+   El array en estos casos tendrá normalment un único elemento. Si se
+   usan más elementos, el sistema generará tantas frases de respuesta
+   como elementos tenga el array.
+
+   Estos patrones no se procesan, siempre es un esquema de respuesta
+   directa.
+-->
+
+   <!-- {{{ HOLA -->
+	<category> 
+		<pattern>HOLA *</pattern> 
+ 		<template> 
+			<srai>HOLA</srai>
+ 		</template> 
+	</category> 
+
+	<category> 
+		<pattern>HOLA</pattern> 
+ 		<template> 
+ 			<random>
+				<li>
+               [{ 
+                  'type': 'direct_answer',
+                  'message': 'Hola',
+               }]
+            </li>
+				<li>
+               [{ 
+                  'type': 'direct_answer',
+                  'message': 'Buenas',
+               }]
+            </li>
+			</random>
+ 		</template> 
+	</category> 
+   <!-- }}} -->
+
+   <!-- {{{ ADIOS -->
+	<category> 
+		<pattern>ADIOS *</pattern> 
+ 		<template> 
+			<srai>ADIOS</srai>
+ 		</template> 
+	</category> 
+
+	<category> 
+		<pattern>ADIOS</pattern> 
+ 		<template> 
+ 			<random>
+				<li>
+               [{ 
+                  'type': 'direct_answer',
+                  'message': 'Adios',
+               }]
+            </li>
+				<li>
+               [{ 
+                  'type': 'direct_answer',
+                  'message': 'Hasta otra',
+               }]
+            </li>
+			</random>
+ 		</template> 
+	</category> 
+   <!-- }}} -->
+
+</aiml>
+

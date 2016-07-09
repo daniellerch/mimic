@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<aiml version="1.0.1" encoding="UTF-8"> 
+
+	<category> 
+		<pattern>ENCIENDE LAS LUCES DEL COMEDOR</pattern> 
+ 		<template> 
+			<srai>ENCIENDE LA LUZ DEL COMEDOR</srai>
+ 		</template> 
+	</category> 
+
+	<category> 
+		<pattern>ABRE LAS LUCES DEL COMEDOR</pattern> 
+ 		<template> 
+			<srai>ENCIENDE LA LUZ DEL COMEDOR</srai>
+ 		</template> 
+	</category> 
+
+	<category> 
+		<pattern>ABRE LA LUZ DEL COMEDOR</pattern> 
+ 		<template> 
+			<srai>ENCIENDE LA LUZ DEL COMEDOR</srai>
+ 		</template> 
+	</category> 
+
+
+	<category> 
+		<pattern>ENCIENDE LA LUZ DEL COMEDOR</pattern> 
+ 		<template> 
+         [{ 
+            'type': 'url_get',
+            'url': 'http://192.168.1.75/setN1+Lsal1+on',
+            'user' : 'user',
+            'password' : 'opendomo',
+         }]
+ 		</template> 
+	</category> 
+
+
+	<category> 
+		<pattern>APAGA LAS LUCES DEL COMEDOR</pattern> 
+ 		<template> 
+			<srai>APAGA LA LUZ DEL COMEDOR</srai>
+ 		</template> 
+	</category> 
+
+	<category> 
+		<pattern>CIERRA LAS LUCES DEL COMEDOR</pattern> 
+ 		<template> 
+			<srai>APAGA LA LUZ DEL COMEDOR</srai>
+ 		</template> 
+	</category> 
+
+	<category> 
+		<pattern>CIERRA LA LUZ DEL COMEDOR</pattern> 
+ 		<template> 
+			<srai>APAGA LA LUZ DEL COMEDOR</srai>
+ 		</template> 
+	</category> 
+
+
+
+	<category> 
+		<pattern>APAGA LA LUZ DEL COMEDOR</pattern> 
+ 		<template> 
+         [{ 
+            'type': 'url_get',
+            'url': 'http://192.168.1.75/setN1+Lsal1+off',
+            'user' : 'user',
+            'password' : 'opendomo',
+         }]
+ 		</template> 
+	</category> 
+
+
+
+
+</aiml>
+

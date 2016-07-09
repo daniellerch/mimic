@@ -1,0 +1,30 @@
+
+   AIML templates:
+   ===========================================================================
+   
+   AIML must use templates with a Python array like the following:
+
+	<template> 
+      [{ 
+         'type': 'relation',
+         'relation': 'IS-A',
+         'quantifier': 'un',
+         'source': '$CONVERSATION_USERS',
+         'destination': '<star index="1"/>'
+      }]
+ 	</template> 
+
+
+   Supported vars:
+   ===========================================================================
+
+   AIML templates can use different variables. These variables contains
+   information from the conversation.
+
+   List of supported vars:
+   - $CONVERSATION_USER
+   - $CONVERSATION_USERS
+   - $MACHINE
+   - $USER
+
+
