@@ -5,57 +5,42 @@ import web
 import json
 import cgitb    
 import logging
-
-
-sys.path.append('/data/mega/research/AI/mimic')
-
 from chatbot import chatbot
 
+# Initialize logging
 logging.basicConfig(level=logging.DEBUG,
    format='%(asctime)s %(levelname)s %(message)s',
    filename='/var/log/mimic.log', filemode='a+')  
   
 cgitb.enable()  
  
+
 # List of services   
 urls = (   
    '/', 'index',
-   '/chat', 'chat',
-   '/test1', 'test1',
-   '/test2', 'test2' 
+   '/chat', 'chat'
 )
  
 app = web.application(urls, globals())   
  
  
 # Service implementation  
- 
-
 class index:    
    def GET(self, name=""):
       web.seeother('../ui/index.html')
  
 class chat:   
-   def POST(self, name=""):
+   def POST(self):
       data = web.data()
-      logging.debug(data)   
-      #return "chat service: "+r
-      #print data 
+      user_input=json.loads(data)
+      logging.debug(user_input["text"])
 
       cb=chatbot()
-      human_input=data.decode("utf-8")
+      human_input=user_input["text"].decode("utf-8")
       response=cb.talk(human_input)
 
-      return data  
+      return response
 
-class test1:    
-   def GET(self, name=""):
-      return "test1 service"   
- 
-class test2:    
-   def GET(self, name=""):
-      return "test2 service"   
- 
 if __name__ == "__main__":
    app.run()    
    

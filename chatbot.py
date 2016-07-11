@@ -32,7 +32,6 @@ class chatbot:
          logging.debug(d)
 
          if d["code"]!=0:
-            logging.debug("--ERROR");
             return "error"
 
          if d["type"]=="relation":

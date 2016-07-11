@@ -19,8 +19,9 @@
          console.log(text);
          $('#history').prepend(text+"<br/>");
 
-         $.post("/ws.py/chat", {"text": text}, function(result){
-            console.log(result);
+         data=JSON.stringify({"text": text});
+         $.post("/ws.py/chat", data, function(result){
+            console.log("result: "+result);
          });
 
       });
