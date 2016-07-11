@@ -341,6 +341,7 @@ class nlp:
          Aq="all"
       if Bq!="exist": 
          Bq="all"
+      r['code']=0
       r["type"]="relation"
       r["source_quantifier"]=Aq
       r["source"]=An
@@ -353,6 +354,7 @@ class nlp:
    # {{{ relation_property_of()
    def relation_property_of(self, Aq, An, Aprop, Bq, Bn, Bprop):
       r=dict()
+      r['code']=0
       r["type"]="relation"
       r["source_quantifier"]=Aq
       r["source"]=An
@@ -365,6 +367,7 @@ class nlp:
    # {{{ relation_part_of()
    def relation_part_of(self, Aq, An, Aprop, Bq, Bn, Bprop):
       r=dict()
+      r['code']=0
       r["type"]="relation"
       r["source_quantifier"]=Aq
       r["source"]=An
@@ -377,6 +380,7 @@ class nlp:
    # {{{ relation_contains()
    def relation_contains(self, Aq, An, Aprop, Bq, Bn, Bprop):
       r=dict()
+      r['code']=0
       r["type"]="relation"
       r["source_quantifier"]=Aq
       r["source"]=An
@@ -390,12 +394,11 @@ class nlp:
    def parse_sentence_greetings(self, t):
       greeting=t.string.strip()
 
-      print greeting
-
       greeting_list_q=["hola", "buenas"]
       greeting_list_a=["hola", "buenas"]
       if self.strip_accents(greeting.lower()) in greeting_list_q:
          r=dict()
+         r['code']=0
          r['type']='direct_answer'
          r['message']=greeting_list_a[randint(0,len(greeting_list_a)-1)]
          return [r]
@@ -405,6 +408,7 @@ class nlp:
       greeting_list_a=["Estoy bien, gracias por preguntar"]
       if self.strip_accents(greeting.lower()) in greeting_list_q:
          r=dict()
+         r['code']=0
          r['type']='direct_answer'
          r['message']=greeting_list_a[randint(0,len(greeting_list_a)-1)]
          return [r]
@@ -413,6 +417,7 @@ class nlp:
       greeting_list_a=["hola", "buenas"]
       if self.strip_accents(greeting.lower()) in greeting_list_q:
          r=dict()
+         r['code']=0
          r['type']='direct_answer'
          r['message']=greeting_list_a[randint(0,len(greeting_list_a)-1)]
          return [r]
@@ -426,12 +431,12 @@ class nlp:
       question_list=["que es"]
       for q in question_list:
          if self.strip_accents(question.lower()).startswith(q):
-            q, n, p = self.parse_NP(t.words[2:len(t.words)-1])
+            q, n, p = self.parse_NP(t.words[2:len(t.words)])
             r=dict()
+            r['code']=0
             r['type']='query'
             r['relation']='IS-A'
             r['object']=n
-            print "n:", n
             # TODO: process quantifier and properties
             return [r]
 
@@ -564,9 +569,11 @@ class nlp:
       if r!=None: 
          return r
 
-      print "ERROR: parse_sentence(), sentence:", sentence
-      print t
-      sys.exit(0)
+      r=dict()
+      r["code"]="-1"
+      r["error_description"]="ERROR: parse_sentence(), sentence:"+sentence
+
+      return [r]
    # }}}
 
 

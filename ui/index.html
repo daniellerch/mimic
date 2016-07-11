@@ -1,0 +1,35 @@
+<html>
+
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+</head>
+
+<body>
+   <input id='user_input' type='text'/>
+   <div id='history'></div>
+</body>
+
+</html>
+
+<script>
+   $(document).ready(function(){
+      $('#user_input').bind("enter_key", function(e){
+         text=$('#user_input').val();
+         $('#user_input').val('');
+         console.log(text);
+         $('#history').prepend(text+"<br/>");
+
+         $.post("/ws.py/chat", {"text": text}, function(result){
+            console.log(result);
+         });
+
+      });
+
+      $('#user_input').keyup(function(e){
+         if(e.keyCode == 13)
+         {
+            $(this).trigger("enter_key");
+         }
+      });
+   });
+</script>

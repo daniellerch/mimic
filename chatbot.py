@@ -2,9 +2,12 @@
 import aiml
 from nlp import nlp
 from knowledge_base import knowledge_base
+import logging
+
 
 class chatbot:
-   
+ 
+	# {{{ __init__  
    def __init__(self):
       self.kb=knowledge_base()
       self.nlp=nlp()
@@ -23,9 +26,15 @@ class chatbot:
          human_input+='.'
 
       data=self.nlp.parse_sentence(human_input)
-      print data
+      logging.debug(data)
 
       for d in data:
+         logging.debug(d)
+
+         if d["code"]!=0:
+            logging.debug("--ERROR");
+            return "error"
+
          if d["type"]=="relation":
             src=d["source"]
             dst=d["destination"]
@@ -37,15 +46,14 @@ class chatbot:
          elif d["type"]=="query":
             entity=d["object"]
             results=self.kb.query_dst(d["relation"], entity)
-            print results
-            return ""
+            return results
 
          elif d["type"]=="direct_answer":
             return d["message"]
 
          else:
-            print "ERROR: unknown type", d["type"]
-            return ""
+            logging.debug("--ERROR");
+            return "ERROR: unknown type", d["type"]
 
       return "ERROR: ?"
    # }}}
