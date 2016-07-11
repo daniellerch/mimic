@@ -1,5 +1,5 @@
 
-from nlp import nlp
+from language.nlp import nlp
 from knowledge_base import knowledge_base
 import logging
 
@@ -25,10 +25,8 @@ class chatbot:
          human_input+='.'
 
       data=self.nlp.parse_sentence(human_input)
-      logging.debug(data)
 
       for d in data:
-         logging.debug(d)
 
          if d["code"]!=0:
             return "error"
@@ -50,7 +48,6 @@ class chatbot:
             return d["message"]
 
          else:
-            logging.debug("--ERROR");
             return "ERROR: unknown type", d["type"]
 
       return "ERROR: ?"

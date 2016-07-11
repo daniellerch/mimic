@@ -1,6 +1,7 @@
 
 import sys
 import sqlite3
+import logging
 
 class knowledge_base:
 
@@ -17,8 +18,8 @@ class knowledge_base:
          self.con.row_factory = self._dict_factory
 
       except sqlite3.Error, e:
-         print e
-         print "Error %s:" % e.args[0]
+         logging.debug(e)
+         logging.debug(e.args[0])
          sys.exit(1)
    # }}}
  

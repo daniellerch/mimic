@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import sys
-from chatbot import chatbot
+from language.chatbot import chatbot
 
 if __name__ == '__main__':
 
@@ -9,7 +9,7 @@ if __name__ == '__main__':
 
    while True: 
       try:
-         human_input=raw_input("MyIA #> ").decode("utf-8")
+         human_input=raw_input("mimic #> ").decode("utf-8")
          if len(human_input)==0:
             continue
 

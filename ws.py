@@ -5,7 +5,7 @@ import web
 import json
 import cgitb    
 import logging
-from chatbot import chatbot
+from language.chatbot import chatbot
 
 # Initialize logging
 logging.basicConfig(level=logging.DEBUG,

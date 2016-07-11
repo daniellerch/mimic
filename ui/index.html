@@ -21,8 +21,8 @@
 
          data=JSON.stringify({"text": text});
          $.post("/ws.py/chat", data, function(result){
-            console.log("result: "+result);
-            $('#history').prepend("<p style='color:red'>M:"+result+"<p/>");
+            if(result.length>0)
+               $('#history').prepend("<p style='color:red'>M:"+result+"<p/>");
          });
 
       });

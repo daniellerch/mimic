@@ -489,8 +489,10 @@ class nlp:
             y=y[2:]
             relation="PART-OF"
 
-      if vp=="contener":
+      elif vp=="contener":
          relation="CONTAINS"
+
+      
 
 
       return x, relation, y
