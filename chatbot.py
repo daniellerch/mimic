@@ -1,5 +1,4 @@
 
-import aiml
 from nlp import nlp
 from knowledge_base import knowledge_base
 import logging
