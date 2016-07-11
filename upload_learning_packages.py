@@ -2,12 +2,12 @@
 
 import sys
 import glob
-from chatbot import chatbot
+from language.chatbot import chatbot
 
 if __name__ == '__main__':
 
    cb=chatbot()
-   files=glob.glob("learn/*.fact")
+   files=glob.glob("learning_packages/*.fact")
 
    cb.clean_memory()
 
