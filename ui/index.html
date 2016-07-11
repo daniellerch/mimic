@@ -17,11 +17,12 @@
          text=$('#user_input').val();
          $('#user_input').val('');
          console.log(text);
-         $('#history').prepend(text+"<br/>");
+         $('#history').prepend("<p style='color:blue'>H:"+text+"<p/>");
 
          data=JSON.stringify({"text": text});
          $.post("/ws.py/chat", data, function(result){
             console.log("result: "+result);
+            $('#history').prepend("<p style='color:red'>M:"+result+"<p/>");
          });
 
       });
