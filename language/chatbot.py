@@ -1,5 +1,5 @@
 
-from language.nlp import nlp
+from language.es.nlp import nlp
 from knowledge.knowledge_base import knowledge_base
 import logging
 
