@@ -205,13 +205,15 @@ from pattern.es import parsetree
 from pattern.es import conjugate, lemma, lexeme, tenses
 from pattern.es import singularize, pluralize, attributive, MALE, SINGULAR
 from random import randint
+from pattern.text.tree import Text
 
 
 # {{{ pattern_match()
 def pattern_match(pattern, sentence):
 
-   print type(sentence)
-   t = parsetree(sentence, lemmata=True)
+   if type(sentence) is not Text:
+      sentence = parsetree(sentence, lemmata=True)
+
    p = Pattern.fromstring(pattern)
    try:
       m = p.match(sentence)
@@ -219,8 +221,6 @@ def pattern_match(pattern, sentence):
    except:
       return None
 # }}}
-
-
 
 # {{{ strip_accents() 
 def strip_accents(s):
@@ -347,35 +347,7 @@ def parse_NP(words):
    return quantifier, noun, properties
 # }}}
 
-# {{{ relation_is_a()
-def relation_is_a(Aq, An, Aprop, Bq, Bn, Bprop):
-   r=dict()
-   if Aq!="exist": 
-      Aq="all"
-   if Bq!="exist": 
-      Bq="all"
-   r['code']=0
-   r["type"]="relation"
-   r["source_quantifier"]=Aq
-   r["source"]=An
-   r["destination_quantifier"]=Bq
-   r["destination"]=Bn
-   r["relation"]='IS-A'
-   return r
-# }}}
 
-# {{{ relation_property_of()
-def relation_property_of(Aq, An, Aprop, Bq, Bn, Bprop):
-   r=dict()
-   r['code']=0
-   r["type"]="relation"
-   r["source_quantifier"]=Aq
-   r["source"]=An
-   r["destination_quantifier"]=Bq
-   r["destination"]=Bn
-   r["relation"]='PROPERTY-OF'
-   return r
-# }}}
 
 # {{{ relation_part_of()
 def relation_part_of(Aq, An, Aprop, Bq, Bn, Bprop):
@@ -497,18 +469,18 @@ def parse_sentence_x_VB_y(t):
 
 # {{{ sentence_pre_processing()
 def sentence_pre_processing(sentence):
+
+   # TODO:
+   # - Preprocess personal names juan->Juan 
+
+   # Easy tagging
    sentence=sentence.replace(' del ', ' de el ')
 
-   # Use less ambiguous forms
-   # PROPERTY-OF
-   sentence=sentence.replace(' es de ', ' es propiedad de ')
-   sentence=sentence.replace(' pertenece a ', ' es propiedad de ')
    # PART-OF
    sentence=sentence.replace(' forma parte de ', ' es parte de ')
    sentence=sentence.replace(' forman parte de ', ' son parte de ')
    # CONTAINS
    sentence=sentence.replace(' tiene dentro ', ' contiene ')
-
 
 
    if sentence[-1:]=='.':

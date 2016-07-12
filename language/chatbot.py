@@ -1,5 +1,5 @@
 
-from language.es.nlp import nlp
+from language.nlp import nlp
 from knowledge.knowledge_base import knowledge_base
 import logging
 
@@ -29,7 +29,7 @@ class chatbot:
       for d in data:
 
          if d["code"]!=0:
-            return "error"
+            return d["error_message"]
 
          if d["type"]=="relation":
             src=d["source"]

@@ -5,33 +5,40 @@ from pattern.es import parsetree
 import language.es.structures as structures
 import language.es.greetings as greetings
 import language.es.questions as questions
+import language.es.relations as relations
 
 class nlp:
 
-
    # {{{ parse_sentence()
    def parse_sentence(self, sentence):
+
       sentence=structures.sentence_pre_processing(sentence)
       t = parsetree(sentence, lemmata=True)
 
-      r=greetings.parse(t)
-      if r!=None: 
-         return r
+      r=relations.process(t, 'IS-PROPERTY-OF')
+      if r: return r
 
-      r=questions.parse(t)
-      if r!=None: 
-         return r
+      r=relations.process(t, 'IS-A')
+      if r: return r
+
+      r=greetings.process(t)
+      if r: return r
+
+      r=questions.process(t)
+      if r: return r
 
       r=structures.parse_sentence_x_VB_y(t)
-      if r!=None: 
-         return r
+      if r: return r
 
       r=dict()
       r["code"]="-1"
-      r["error_description"]="ERROR: parse_sentence(), sentence:"+sentence
+      r["error_message"]="mmm, no te entiendo ..."
 
       return [r]
    # }}}
+
+
+ 
 
 
 if __name__ == "__main__":
