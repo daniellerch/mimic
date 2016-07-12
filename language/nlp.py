@@ -206,9 +206,26 @@ from pattern.es import conjugate, lemma, lexeme, tenses
 from pattern.es import singularize, pluralize, attributive, MALE, SINGULAR
 from random import randint
 
+import language.greetings
 
 class nlp:
-   
+
+
+   # {{{ pattern_match()
+   def pattern_match(self, pattern, sentence):
+
+      print type(sentence)
+      t = parsetree(sentence, lemmata=True)
+      p = Pattern.fromstring(pattern)
+      try:
+         m = p.match(sentence)
+         return m
+      except:
+         return None
+   # }}}
+ 
+
+ 
    # {{{ strip_accents() 
    def strip_accents(self, s):
       return ''.join(c for c in unicodedata.normalize('NFD', s)
@@ -390,40 +407,6 @@ class nlp:
       return r
    # }}}
 
-   # {{{ parse_sentence_greetings()
-   def parse_sentence_greetings(self, t):
-      greeting=t.string.strip()
-
-      greeting_list_q=["hola", "buenas"]
-      greeting_list_a=["hola", "buenas"]
-      if self.strip_accents(greeting.lower()) in greeting_list_q:
-         r=dict()
-         r['code']=0
-         r['type']='direct_answer'
-         r['message']=greeting_list_a[randint(0,len(greeting_list_a)-1)]
-         return [r]
-
-      greeting_list_q=["que tal", "como estas", "como va",  
-         "como te encuentras", "va todo bien"]
-      greeting_list_a=["Estoy bien, gracias por preguntar"]
-      if self.strip_accents(greeting.lower()) in greeting_list_q:
-         r=dict()
-         r['code']=0
-         r['type']='direct_answer'
-         r['message']=greeting_list_a[randint(0,len(greeting_list_a)-1)]
-         return [r]
-
-      greeting_list_q=["buenos dias", "buenas tardes", "buenas noches"]
-      greeting_list_a=["hola", "buenas"]
-      if self.strip_accents(greeting.lower()) in greeting_list_q:
-         r=dict()
-         r['code']=0
-         r['type']='direct_answer'
-         r['message']=greeting_list_a[randint(0,len(greeting_list_a)-1)]
-         return [r]
-
-      return None
-   # }}}
 
    # {{{ parse_sentence_question()
    def parse_sentence_question(self, t):
@@ -559,7 +542,7 @@ class nlp:
       sentence=self.sentence_pre_processing(sentence)
       t = parsetree(sentence, lemmata=True)
 
-      r=self.parse_sentence_greetings(t)
+      r=language.greetings.parse(t)
       if r!=None: 
          return r
 
