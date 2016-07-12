@@ -94,25 +94,16 @@ Relation tags
 
 Relations tags describe the relation between different chunks, and clarify the role of a chunk in that relation. The most common roles in a sentence are SBJ (subject noun phrase) and OBJ (object noun phrase). They link NP to VP chunks. The subject of a sentence is the person, thing, place or idea that is doing or being something. The object of a sentence is the person/thing affected by the action.
 
-Tag   Description Chunks   Example  %
--SBJ  sentence subject  NP the cat sat on the mat
-35
--OBJ  sentence object   NP+SBAR  the cat grabs the fish
-27
--PRD  predicate   PP+NP+ADJP  the cat feels warm and fuzzy
-7
--TMP  temporal    PP+NP+ADVP  arrive at noon 
-7
--CLR  closely related   PP+NP+ADVP  work as a researcher 
-6
--LOC  location    PP    live in Belgium 
-4
--DIR  direction   PP walk towards the door
-3
--EXT  extent   PP+NP drop 10 %
-1
--PRP  purpose  PP+SBAR  die as a result of 
-1
+Tag   Description          Chunks      Example                          %
+-SBJ  sentence subject     NP          the cat sat on the mat           35
+-OBJ  sentence object      NP+SBAR     the cat grabs the fish           27
+-PRD  predicate            PP+NP+ADJP  the cat feels warm and fuzzy     7
+-TMP  temporal             PP+NP+ADVP  arrive at noon                   7
+-CLR  closely related      PP+NP+ADVP  work as a researcher             6
+-LOC  location             PP          live in Belgium                  4
+-DIR  direction            PP          walk towards the door            3
+-EXT  extent               PP+NP       drop 10 %                        1
+-PRP  purpose              PP+SBAR     die as a result of               1
 Anchor tags
 Anchor tags describe how prepositional noun phrases (PNP) are attached to other chunks in the sentence. For example, in the sentence, I eat pizza with a fork, the anchor of with a fork is eat because it answers the question: "In what way do I eat?"
 
@@ -222,17 +213,6 @@ def pattern_match(pattern, sentence):
       return None
 # }}}
 
-# {{{ strip_accents() 
-def strip_accents(s):
-   #if type(s)==str:
-   #   return s
-
-   #s=''.join(c for c in unicodedata.normalize('NFD', s)
-   #   if unicodedata.category(c) != 'Mn')
-
-   return s
-# }}}
-
 # {{{ get_quantifier_from_NN_JJ()
 def get_quantifier_from_NN_JJ(noun):
    if noun==singularize(noun):
@@ -255,7 +235,7 @@ def get_quantifier_from_DT(dt):
       "unos", "unas"]:
       return "exist"
    else:
-      print "ERROR: parse_NP(): unknown DT '"+str(dt.lower())+"'"
+      print "ERROR: get_quantifier_from_DT(): unknown DT '"+str(dt.lower())+"'"
       sys.exit(0)
 # }}}
 
@@ -264,7 +244,7 @@ def get_quantifier_from_IN(dt):
    if dt.lower() in ["a"]:
       return "one"
    else:
-      print "ERROR: parse_NP(): unknown DT '"+str(dt.lower())+"'"
+      print "ERROR: get_quantifier_from_IN(): unknown DT '"+str(dt.lower())+"'"
       sys.exit(0)
 # }}}
 
@@ -349,6 +329,7 @@ def parse_NP(words):
       print words
       sys.exit(0)
 
+
    return quantifier, noun, properties
 # }}}
 
@@ -361,11 +342,6 @@ def sentence_pre_processing(sentence):
    # Easy tagging
    sentence=sentence.replace(' del ', ' de el ')
 
-   # PART-OF
-   sentence=sentence.replace(' forma parte de ', ' es parte de ')
-   sentence=sentence.replace(' forman parte de ', ' son parte de ')
-   # CONTAINS
-   sentence=sentence.replace(' tiene dentro ', ' contiene ')
 
 
    if sentence[-1:]=='.':

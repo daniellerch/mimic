@@ -137,7 +137,6 @@ class knowledge_base:
       results=[]
       try:
          self.get_inherited_properties(src, rel, results)
-
          return results
 
       except sqlite3.Error, e:

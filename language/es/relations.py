@@ -3,61 +3,55 @@
 
 import language.es.structures as structures
 
+
+
 # {{{ process()
-def process(t, relation):
+def process(t):
 
-   if relation=='IS-A':
-      return process_is_a(t)
+   r=process_has_attribute(t)
+   if r: return r
   
-   if relation=='IS-PROPERTY-OF':
-      return process_is_property_of(t)
-    
-   if relation=='IS-PART-OF':
-      return process_is_part_of(t)
+   r=process_is_property_of(t)
+   if r: return r
+  
+   r=process_is_part_of(t)
+   if r: return r
 
-   if relation=='CONTAINS':
-      return process_contains(t)
+   r=process_is_a(t)
+   if r: return r
+
+   r=process_contains(t)
+   if r: return r
 
 
    return None
 # }}}
 
-# {{{ process_is_a()
-def process_is_a(t):
+# {{{ process_has_attribute()
+def process_has_attribute(t):
 
    while True:
-
-      m=structures.pattern_match("{NP} ser {NP}", t)
-      if m: break
 
       m=structures.pattern_match("{NP} ser {JJ*}", t)
       if m: break
 
-      m=structures.pattern_match("{JJ*} ser {NP}", t)
-      if m: break
-
       return None
 
+   print m
 
    Aq, An, Aprop = structures.parse_NP(m.group(1))
    Bq, Bn, Bprop = structures.parse_NP(m.group(2))
 
    r=dict()
-
-   if Aq!="exist": 
-      Aq="all"
-   if Bq!="exist": 
-      Bq="all"
-
    r['code']=0
    r["type"]="relation"
    r["source_quantifier"]=Aq
    r["source"]=An
    r["destination_quantifier"]=Bq
    r["destination"]=Bn
-   r["relation"]='IS-A'
+   r["relation"]='HAS-ATTRIBUTE'
 
-   return [r]
+   return r
 # }}}
 
 # {{{ process_is_property_of()
@@ -90,7 +84,7 @@ def process_is_property_of(t):
    r["destination"]=Bn
    r["relation"]='PROPERTY-OF'
 
-   return [r]
+   return r
 # }}}
 
 # {{{ process_is_part_of()
@@ -118,9 +112,44 @@ def process_is_part_of(t):
    r["source"]=An
    r["destination_quantifier"]=Bq
    r["destination"]=Bn
-   r["relation"]='PART-OF'
+   r["relation"]='IS-PART-OF'
 
-   return [r]
+   return r
+# }}}
+
+# {{{ process_is_a()
+def process_is_a(t):
+
+   while True:
+
+      m=structures.pattern_match("{NP} ser {NP}", t)
+      if m: break
+
+      m=structures.pattern_match("{JJ*} ser {NP}", t)
+      if m: break
+
+      return None
+
+
+   Aq, An, Aprop = structures.parse_NP(m.group(1))
+   Bq, Bn, Bprop = structures.parse_NP(m.group(2))
+
+   r=dict()
+
+   if Aq!="exist": 
+      Aq="all"
+   if Bq!="exist": 
+      Bq="all"
+
+   r['code']=0
+   r["type"]="relation"
+   r["source_quantifier"]=Aq
+   r["source"]=An
+   r["destination_quantifier"]=Bq
+   r["destination"]=Bn
+   r["relation"]='IS-A'
+
+   return r
 # }}}
 
 # {{{ process_contains()
@@ -129,6 +158,9 @@ def process_contains(t):
    while True:
 
       m=structures.pattern_match("{NP} contiene {NP}", t)
+      if m: break
+
+      m=structures.pattern_match("{NP} tener dentro {NP}", t)
       if m: break
 
       return None
@@ -147,7 +179,7 @@ def process_contains(t):
    r["destination"]=Bn
    r["relation"]='CONTAINS'
 
-   return [r]
+   return r
 # }}}
 
 

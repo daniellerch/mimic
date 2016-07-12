@@ -12,32 +12,23 @@ class nlp:
    # {{{ parse_sentence()
    def parse_sentence(self, sentence):
 
-      sentence=structures.strip_accents(sentence.lower())
+      sentence=sentence.lower()
       sentence=structures.sentence_pre_processing(sentence)
 
       t = parsetree(sentence, lemmata=True)
-
-      r=relations.process(t, 'CONTAINS')
-      if r: return r
-
-      r=relations.process(t, 'IS-PART-OF')
-      if r: return r
-
-      r=relations.process(t, 'IS-PROPERTY-OF')
-      if r: return r
-
-      r=relations.process(t, 'IS-A')
-      if r: return r
-
+    
       r=greetings.process(t)
       if r: return r
 
       r=questions.process(t)
       if r: return r
 
+      r=relations.process(t)
+      if r: return r
+
       r=dict()
       r["code"]="-1"
-      r["error_message"]="mmm, no te entiendo ..."
+      r["error_message"]="No te he entendido. ¿Podrías reformular la frase?"
 
       return [r]
    # }}}
