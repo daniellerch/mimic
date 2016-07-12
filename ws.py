@@ -36,7 +36,8 @@ class chat:
       logging.debug(user_input["text"])
 
       cb=chatbot()
-      human_input=user_input["text"].decode("utf-8")
+      human_input=user_input["text"]
+      #.decode("utf-8")
       response=cb.talk(human_input)
 
       return response

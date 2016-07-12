@@ -14,7 +14,7 @@ class knowledge_base:
 
    def __init__(self):
       try:
-         self.con = sqlite3.connect('knowledge.sqlite')
+         self.con = sqlite3.connect('knowledge.db')
          self.con.row_factory = self._dict_factory
 
       except sqlite3.Error, e:
@@ -60,7 +60,7 @@ class knowledge_base:
          cur.execute("delete from relations_n2;")
          self.con.commit()
          
-         cur.execute("delete from objects;")
+         cur.execute("delete from concepts;")
          self.con.commit()
 
       except sqlite3.Error, e:
@@ -73,13 +73,13 @@ class knowledge_base:
    def object_id(self, name):
       try:
          cur = self.con.cursor()    
-         cur.execute("select id from objects where name='"+name+"';")
+         cur.execute("select id from concepts where name='"+name+"';")
          data=cur.fetchall()
          
          if len(data)>0:
             object_id=data[0]["id"]
          else:
-            cur.execute("insert into objects (name) values ('"+name+"');")
+            cur.execute("insert into concepts (name) values ('"+name+"');")
             self.con.commit()
             object_id=cur.lastrowid
 
@@ -95,7 +95,7 @@ class knowledge_base:
    def object_name(self, object_id):
       try:
          cur = self.con.cursor()    
-         cur.execute("select name from objects where id='"+str(object_id)+"';")
+         cur.execute("select name from concepts where id='"+str(object_id)+"';")
          data=cur.fetchall()
          
          if len(data)>0:

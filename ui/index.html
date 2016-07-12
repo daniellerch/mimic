@@ -1,30 +1,139 @@
 <html>
 
 <head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="/ui/js/jquery.min.js"></script>
+<script src="/ui/js/voice.js"></script>
 </head>
 
 <body>
-   <input id='user_input' type='text'/>
+
+   <table>
+      <tr>
+         <td>
+            <input id='user_input' type='text'/>
+         </td>
+         <td>
+            <a id="start_button" onclick="startButton(event)">
+            <img id="start_img" width="30px"
+                 src="/ui/images/mic.gif">
+            </a>
+         </td>
+      </tr>
+   </table>
+
    <div id='history'></div>
 </body>
 
 </html>
 
 <script>
+
+
+   var recognizing = false;
+   var ignore_onend;
+
+   if ('webkitSpeechRecognition' in window)
+   {
+      var recognition = new webkitSpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+
+      recognition.onstart = function() 
+      {
+         recognizing = true;
+         start_img.src = '/ui/images/mic-animate.gif';
+      };
+
+      recognition.onerror = function(event) 
+      {
+         if (event.error == 'no-speech') 
+         {
+            start_img.src = '/ui/images/mic.gif';
+            ignore_onend = true;
+         }
+
+         if (event.error == 'audio-capture') 
+         {
+            start_img.src = '/ui/images/mic.gif';
+            ignore_onend = true;
+         }
+
+         if (event.error == 'not-allowed') 
+         {
+            ignore_onend = true;
+         }
+      };
+
+      recognition.onend = function() 
+      {
+         recognizing = false;
+         if (ignore_onend) 
+         {
+            return;
+         }
+       
+         start_img.src = '/ui/images/mic.gif';
+      };
+
+      recognition.onresult = function(event) 
+      {
+         var interim_transcript = '';
+         if (typeof(event.results) == 'undefined') 
+         {
+            recognition.onend = null;
+            recognition.stop();
+            return;
+         }
+
+         for (var i = event.resultIndex; i < event.results.length; ++i) 
+         {
+            if (event.results[i].isFinal) 
+            {
+               var text=event.results[i][0].transcript;
+               process_human_input(text);
+            } 
+         }
+      };
+   }
+
+
+   function startButton(event) 
+   {
+      if (recognizing) 
+      {
+         recognition.stop();
+         return;
+      }
+
+      recognition.lang = 'es-ES';
+      recognition.start();
+      ignore_onend = false;
+      start_img.src = '/ui/images/mic-slash.gif';
+   }
+
+
+   function process_human_input(text)
+   {
+      $('#history').prepend("<span style='color:blue'>H:"+text+"<span/><br>");
+
+      data=JSON.stringify({"text": text});
+      $.post("/ws.py/chat", data, function(result){
+         if(result.length>0)
+         {
+            $('#history').prepend("<span style='color:red'>M:"+result+"<span/><br>");
+            speak(result);
+         }
+      });
+
+   }
+
+
    $(document).ready(function(){
       $('#user_input').bind("enter_key", function(e){
          text=$('#user_input').val();
          $('#user_input').val('');
          console.log(text);
-         $('#history').prepend("<span style='color:blue'>H:"+text+"<span/><br>");
-
-         data=JSON.stringify({"text": text});
-         $.post("/ws.py/chat", data, function(result){
-            if(result.length>0)
-               $('#history').prepend("<span style='color:red'>M:"+result+"<span/><br>");
-         });
-
+         process_human_input(text);
       });
 
       $('#user_input').keyup(function(e){

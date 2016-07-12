@@ -12,8 +12,16 @@ class nlp:
    # {{{ parse_sentence()
    def parse_sentence(self, sentence):
 
+      sentence=structures.strip_accents(sentence.lower())
       sentence=structures.sentence_pre_processing(sentence)
+
       t = parsetree(sentence, lemmata=True)
+
+      r=relations.process(t, 'CONTAINS')
+      if r: return r
+
+      r=relations.process(t, 'IS-PART-OF')
+      if r: return r
 
       r=relations.process(t, 'IS-PROPERTY-OF')
       if r: return r
@@ -25,9 +33,6 @@ class nlp:
       if r: return r
 
       r=questions.process(t)
-      if r: return r
-
-      r=structures.parse_sentence_x_VB_y(t)
       if r: return r
 
       r=dict()

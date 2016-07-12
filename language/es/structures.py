@@ -224,8 +224,13 @@ def pattern_match(pattern, sentence):
 
 # {{{ strip_accents() 
 def strip_accents(s):
-   return ''.join(c for c in unicodedata.normalize('NFD', s)
-      if unicodedata.category(c) != 'Mn')
+   #if type(s)==str:
+   #   return s
+
+   #s=''.join(c for c in unicodedata.normalize('NFD', s)
+   #   if unicodedata.category(c) != 'Mn')
+
+   return s
 # }}}
 
 # {{{ get_quantifier_from_NN_JJ()
@@ -345,126 +350,6 @@ def parse_NP(words):
       sys.exit(0)
 
    return quantifier, noun, properties
-# }}}
-
-
-
-# {{{ relation_part_of()
-def relation_part_of(Aq, An, Aprop, Bq, Bn, Bprop):
-   r=dict()
-   r['code']=0
-   r["type"]="relation"
-   r["source_quantifier"]=Aq
-   r["source"]=An
-   r["destination_quantifier"]=Bq
-   r["destination"]=Bn
-   r["relation"]='PART-OF'
-   return r
-# }}}
-
-# {{{ relation_contains()
-def relation_contains(Aq, An, Aprop, Bq, Bn, Bprop):
-   r=dict()
-   r['code']=0
-   r["type"]="relation"
-   r["source_quantifier"]=Aq
-   r["source"]=An
-   r["destination_quantifier"]=Bq
-   r["destination"]=Bn
-   r["relation"]='CONTAINS'
-   return r
-# }}}
-
-
-
-# {{{ split_x_and_y()
-def split_x_and_y(t):
-   x=[]
-   y=[]
-   found=0
-   for w in t.words: 
-      if w.string=="y":
-         found=1  
-         continue
-      if found==0:
-         x.append(w)
-      else:
-         y.append(w)
-
-   return x, y
-# }}}
-
-# {{{ split_x_relation_y()
-def split_x_relation_y(t):
-   x=[]
-   y=[]
-   found=0
-   for w in t.words: 
-      if w.tag=="VB":
-         vp=lemma(w.string)
-         found=1 
-         continue
-      if found==0:
-         x.append(w)
-      else:
-         y.append(w)
-
-
-   if vp=="ser":
-      relation="IS-A"
-
-      # es propiedad de
-      if len(y)>2 and y[0].string=="propiedad" and y[1].string=="de":
-         y=y[2:]
-         relation="PROPERTY-OF"
-
-      # es parte de
-      if len(y)>2 and y[0].string=="parte" and y[1].string=="de":
-         y=y[2:]
-         relation="PART-OF"
-
-   elif vp=="contener":
-      relation="CONTAINS"
-
-   
-
-
-   return x, relation, y
-# }}}
-
-# {{{ parse_sentence_x_VB_y()
-def parse_sentence_x_VB_y(t):
-   n_vb=0
-
-   # Count number of verbs
-   for w in t.words: 
-      if w.tag=="VB":
-         n_vb+=1
-
-   # Only one verb
-   if n_vb==1:
-      x, relation, y = split_x_relation_y(t)
-      npA_q, npA_n, npA_prop = parse_NP(x)
-      npB_q, npB_n, npB_prop = parse_NP(y)
-
-      if relation=="IS-A":
-         return [relation_is_a(npA_q, npA_n, npA_prop, 
-                                    npB_q, npB_n, npB_prop)]
-
-      elif relation=="PROPERTY-OF":
-         return [relation_property_of(npA_q, npA_n, npA_prop, 
-                                           npB_q, npB_n, npB_prop)]
-
-      elif relation=="PART-OF":
-         return [relation_part_of(npA_q, npA_n, npA_prop, 
-                                       npB_q, npB_n, npB_prop)]
-
-      elif relation=="CONTAINS":
-         return [relation_contains(npA_q, npA_n, npA_prop, 
-                                        npB_q, npB_n, npB_prop)]
-
-
-   return None
 # }}}
 
 # {{{ sentence_pre_processing()

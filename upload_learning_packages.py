@@ -18,7 +18,9 @@ if __name__ == '__main__':
 
       for l in lines:
          if l[:1]!='#': # ignore comments
-            print cb.talk(l)
+            r=cb.talk(l)
+            if r!="":
+               print r, "(", l[:-1], ")"
          
 
 
