@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import language.es.structures as structures
+import language.es.pattern_utils as pattern_utils
 from pattern.es import conjugate, lemma, lexeme, tenses
 from pattern.es import singularize, pluralize, attributive, MALE, SINGULAR
 from pattern.es import MALE, FEMALE
@@ -31,8 +31,11 @@ class Answer:
 
    def get_question_reply(self, sentence_info, options):
 
+      if len(options)==0:
+         return "No lo se"
+
       rnd=random.randint(0, len(options)-1)
-      g=structures.gender(options[rnd])
+      g=pattern_utils.gender(options[rnd])
       article='un'
       if g==FEMALE:
          article='una'

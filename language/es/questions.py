@@ -1,22 +1,22 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import language.es.structures as structures
+import language.es.pattern_utils as pattern_utils
 
 # {{{ process()
 def process(t):
-   m=structures.pattern_match("que ser {NP}", t)
+   m=pattern_utils.pattern_match("que ser {NP}", t)
    if m:
-      q, n, p = structures.parse_NP(m.group(1))
+      q, n, p = pattern_utils.parse_NP(m.group(1))
       r=dict()
       r['type']='query'
       r['relation']='IS-A'
       r['object']=n
       return r
 
-   m=structures.pattern_match("como ser {NP}", t)
+   m=pattern_utils.pattern_match("como ser {NP}", t)
    if m:
-      q, n, p = structures.parse_NP(m.group(1))
+      q, n, p = pattern_utils.parse_NP(m.group(1))
       r=dict()
       r['type']='query'
       r['relation']='HAS-ATTRIBUTE'

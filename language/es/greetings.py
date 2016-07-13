@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import language.es.structures as structures
+import language.es.pattern_utils as pattern_utils
 from random import randint
 
 # {{{ process()

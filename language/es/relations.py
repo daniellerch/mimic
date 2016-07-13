@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import language.es.structures as structures
+import language.es.pattern_utils as pattern_utils
 
 
 
@@ -32,15 +32,15 @@ def process_has_attribute(t):
 
    while True:
 
-      m=structures.pattern_match("{NP} ser {JJ*}", t)
+      m=pattern_utils.pattern_match("{NP} ser {JJ*}", t)
       if m: break
 
       return None
 
    print m
 
-   Aq, An, Aprop = structures.parse_NP(m.group(1))
-   Bq, Bn, Bprop = structures.parse_NP(m.group(2))
+   Aq, An, Aprop = pattern_utils.parse_NP(m.group(1))
+   Bq, Bn, Bprop = pattern_utils.parse_NP(m.group(2))
 
    r=dict()
    r['code']=0
@@ -59,21 +59,21 @@ def process_is_property_of(t):
 
    while True:
 
-      m=structures.pattern_match("{NP} pertenecer a {NP}", t)
+      m=pattern_utils.pattern_match("{NP} pertenecer a {NP}", t)
       if m: break
 
-      m=structures.pattern_match("{NP} ser propiedad de {NP}", t)
+      m=pattern_utils.pattern_match("{NP} ser propiedad de {NP}", t)
       if m: break
 
-      m=structures.pattern_match("{NP} ser de {NP}", t)
+      m=pattern_utils.pattern_match("{NP} ser de {NP}", t)
       if m: break
 
       return None
 
    print m
 
-   Aq, An, Aprop = structures.parse_NP(m.group(1))
-   Bq, Bn, Bprop = structures.parse_NP(m.group(2))
+   Aq, An, Aprop = pattern_utils.parse_NP(m.group(1))
+   Bq, Bn, Bprop = pattern_utils.parse_NP(m.group(2))
 
    r=dict()
    r['code']=0
@@ -92,18 +92,18 @@ def process_is_part_of(t):
 
    while True:
 
-      m=structures.pattern_match("{NP} ser parte de {NP}", t)
+      m=pattern_utils.pattern_match("{NP} ser parte de {NP}", t)
       if m: break
 
-      m=structures.pattern_match("{NP} formar parte de {NP}", t)
+      m=pattern_utils.pattern_match("{NP} formar parte de {NP}", t)
       if m: break
 
       return None
 
    print m
 
-   Aq, An, Aprop = structures.parse_NP(m.group(1))
-   Bq, Bn, Bprop = structures.parse_NP(m.group(2))
+   Aq, An, Aprop = pattern_utils.parse_NP(m.group(1))
+   Bq, Bn, Bprop = pattern_utils.parse_NP(m.group(2))
 
    r=dict()
    r['code']=0
@@ -122,17 +122,17 @@ def process_is_a(t):
 
    while True:
 
-      m=structures.pattern_match("{NP} ser {NP}", t)
+      m=pattern_utils.pattern_match("{NP} ser {NP}", t)
       if m: break
 
-      m=structures.pattern_match("{JJ*} ser {NP}", t)
+      m=pattern_utils.pattern_match("{JJ*} ser {NP}", t)
       if m: break
 
       return None
 
 
-   Aq, An, Aprop = structures.parse_NP(m.group(1))
-   Bq, Bn, Bprop = structures.parse_NP(m.group(2))
+   Aq, An, Aprop = pattern_utils.parse_NP(m.group(1))
+   Bq, Bn, Bprop = pattern_utils.parse_NP(m.group(2))
 
    r=dict()
 
@@ -157,18 +157,18 @@ def process_contains(t):
 
    while True:
 
-      m=structures.pattern_match("{NP} contiene {NP}", t)
+      m=pattern_utils.pattern_match("{NP} contiene {NP}", t)
       if m: break
 
-      m=structures.pattern_match("{NP} tener dentro {NP}", t)
+      m=pattern_utils.pattern_match("{NP} tener dentro {NP}", t)
       if m: break
 
       return None
 
    print m
 
-   Aq, An, Aprop = structures.parse_NP(m.group(1))
-   Bq, Bn, Bprop = structures.parse_NP(m.group(2))
+   Aq, An, Aprop = pattern_utils.parse_NP(m.group(1))
+   Bq, Bn, Bprop = pattern_utils.parse_NP(m.group(2))
 
    r=dict()
    r['code']=0

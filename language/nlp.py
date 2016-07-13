@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from pattern.es import parsetree
-import language.es.structures as structures
+import language.es.pattern_utils as pattern_utils
 import language.es.greetings as greetings
 import language.es.questions as questions
 import language.es.relations as relations
@@ -13,7 +13,7 @@ class nlp:
    def parse_sentence(self, sentence):
 
       sentence=sentence.lower()
-      sentence=structures.sentence_pre_processing(sentence)
+      sentence=pattern_utils.sentence_pre_processing(sentence)
 
       t = parsetree(sentence, lemmata=True)
     
