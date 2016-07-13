@@ -2,26 +2,27 @@
 
 <head>
 <script src="/ui/js/jquery.min.js"></script>
+<script src="/ui/js/bootstrap.min.js"></script>
 <script src="/ui/js/voice.js"></script>
+<link rel="stylesheet" href="/ui/css/bootstrap.min.css"/>
 </head>
 
 <body>
 
-   <table>
-      <tr>
-         <td>
-            <input id='user_input' type='text'/>
-         </td>
-         <td>
-            <a id="start_button" onclick="startButton(event)">
-            <img id="start_img" width="30px"
-                 src="/ui/images/mic.gif">
-            </a>
-         </td>
-      </tr>
-   </table>
+   <br><br><br>
 
-   <div id='history'></div>
+   <div class="row" style="text-align:center">
+      <input id='user_input' type='text' style='width:40%'/>
+      <a id="voice_recognition_button">
+         <img id="start_img" src="/ui/images/mic.gif">
+      </a>
+   </div>
+
+   <br><br>
+
+   <div class="row" style="text-align:center">
+      <div id='history'></div>
+   </div>
 </body>
 
 </html>
@@ -29,106 +30,32 @@
 <script>
 
 
-   var recognizing = false;
-   var ignore_onend;
+   $(document).ready(function(){
 
-   if ('webkitSpeechRecognition' in window)
-   {
-      var recognition = new webkitSpeechRecognition();
-      recognition.continuous = true;
-      recognition.interimResults = true;
+      function process_human_input(text) {
+         $('#history').prepend("<span style='color:blue'>H:"+text+"<span/><br>");
 
-      recognition.onstart = function() 
-      {
-         recognizing = true;
-         start_img.src = '/ui/images/mic-animate.gif';
-      };
-
-      recognition.onerror = function(event) 
-      {
-         if (event.error == 'no-speech') 
-         {
-            start_img.src = '/ui/images/mic.gif';
-            ignore_onend = true;
-         }
-
-         if (event.error == 'audio-capture') 
-         {
-            start_img.src = '/ui/images/mic.gif';
-            ignore_onend = true;
-         }
-
-         if (event.error == 'not-allowed') 
-         {
-            ignore_onend = true;
-         }
-      };
-
-      recognition.onend = function() 
-      {
-         recognizing = false;
-         if (ignore_onend) 
-         {
-            return;
-         }
-       
-         start_img.src = '/ui/images/mic.gif';
-      };
-
-      recognition.onresult = function(event) 
-      {
-         var interim_transcript = '';
-         if (typeof(event.results) == 'undefined') 
-         {
-            recognition.onend = null;
-            recognition.stop();
-            return;
-         }
-
-         for (var i = event.resultIndex; i < event.results.length; ++i) 
-         {
-            if (event.results[i].isFinal) 
+         data=JSON.stringify({"text": text});
+         $.post("/ws.py/chat", data, function(result){
+            if(result.length>0)
             {
-               var text=event.results[i][0].transcript;
-               process_human_input(text);
-            } 
-         }
-      };
-   }
-
-
-   function startButton(event) 
-   {
-      if (recognizing) 
-      {
-         recognition.stop();
-         return;
+               $('#history').prepend("<span style='color:red'>M:"+result+"<span/><br>");
+               v.speak(result);
+            }
+         });
       }
 
-      recognition.lang = 'es-ES';
-      recognition.start();
-      ignore_onend = false;
-      start_img.src = '/ui/images/mic-slash.gif';
-   }
 
+      var v = new Voice();
+      v.init(process_human_input);
 
-   function process_human_input(text)
-   {
-      $('#history').prepend("<span style='color:blue'>H:"+text+"<span/><br>");
-
-      data=JSON.stringify({"text": text});
-      $.post("/ws.py/chat", data, function(result){
-         if(result.length>0)
-         {
-            $('#history').prepend("<span style='color:red'>M:"+result+"<span/><br>");
-            speak(result);
-         }
+      $('#voice_recognition_button').click(function(){
+         if(!v.recognizing)
+            v.recognition_start();
+         else
+            v.recognition_stop();
       });
 
-   }
-
-
-   $(document).ready(function(){
       $('#user_input').bind("enter_key", function(e){
          text=$('#user_input').val();
          $('#user_input').val('');
