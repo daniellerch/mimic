@@ -216,8 +216,10 @@ def pattern_match(pattern, sentence):
 
 # {{{ gender()
 def gender(noun):
+   """Return the gender of the noun"""
    s=singularize(noun)
-   if s[-1:]=='a':
+   f=attributive(noun, FEMALE+SINGULAR)
+   if s==f:
       return FEMALE
    else: 
       return MALE
