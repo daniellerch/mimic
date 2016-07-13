@@ -194,7 +194,8 @@ from pattern.search import Pattern
 from pattern.es import parse
 from pattern.es import parsetree
 from pattern.es import conjugate, lemma, lexeme, tenses
-from pattern.es import singularize, pluralize, attributive, MALE, SINGULAR
+from pattern.es import singularize, pluralize, attributive, SINGULAR, PLURAL
+from pattern.es import MALE, FEMALE
 from random import randint
 from pattern.text.tree import Text
 
@@ -212,6 +213,16 @@ def pattern_match(pattern, sentence):
    except:
       return None
 # }}}
+
+# {{{ gender()
+def gender(noun):
+   s=singularize(noun)
+   if s[-1:]=='a':
+      return FEMALE
+   else: 
+      return MALE
+# }}}
+
 
 # {{{ get_quantifier_from_NN_JJ()
 def get_quantifier_from_NN_JJ(noun):

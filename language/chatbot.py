@@ -1,7 +1,7 @@
 
 from language.nlp import nlp
 from knowledge.knowledge_base import knowledge_base
-from language.es.answer import StandardAnswer
+from language.es.answer import Answer
 import logging
 
 
@@ -25,30 +25,35 @@ class chatbot:
       if human_input[-1:]!='.':
          human_input+='.'
 
-      r=self.nlp.parse_sentence(human_input)
+      sentence_info=self.nlp.parse_sentence(human_input)
+      answer = Answer()
 
-      if r["type"]=="relation":
+      if sentence_info.has_key('code') and sentence_info["code"]!=0:
+         return sentence_info["error_message"]
+
+      if sentence_info["type"]=="relation":
          self.kb.add_2n_relation(
             0,    
-            r["relation"], 
-            r["source_quantifier"], 
-            r["source"], 
-            r["destination_quantifier"],
-            r["destination"]
+            sentence_info["relation"], 
+            sentence_info["source_quantifier"], 
+            sentence_info["source"], 
+            sentence_info["destination_quantifier"],
+            sentence_info["destination"]
          )
-         return StandardAnswer().get_ok_synonymous()
+         return answer.get_ok_synonymous()
 
-      elif r["type"]=="query":
-         results=self.kb.query_dst(r["relation"], r["object"])
-         return results
+      elif sentence_info["type"]=="query":
+         results=self.kb.query_dst(
+            sentence_info["relation"], 
+            sentence_info["object"]
+         )
+         return answer.get_question_reply(sentence_info, results)
 
-      elif r["type"]=="direct_answer":
-         return r["message"]
+      elif sentence_info["type"]=="direct_answer":
+         return sentence_info["message"]
 
-      else:
-         return "ERROR: unknown type", d["type"]
 
-      return "ERROR: ?"
+      return "Vaya, parece que tengo un problema interno"
    # }}}
 
 

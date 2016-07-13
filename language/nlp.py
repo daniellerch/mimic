@@ -30,7 +30,7 @@ class nlp:
       r["code"]="-1"
       r["error_message"]="No te he entendido. ¿Podrías reformular la frase?"
 
-      return [r]
+      return r
    # }}}
 
 

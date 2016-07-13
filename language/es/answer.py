@@ -1,9 +1,14 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import language.es.structures as structures
+from pattern.es import conjugate, lemma, lexeme, tenses
+from pattern.es import singularize, pluralize, attributive, MALE, SINGULAR
+from pattern.es import MALE, FEMALE
+
 import random
 
-class StandardAnswer:
+class Answer:
 
    def __init__(self):
        
@@ -23,3 +28,22 @@ class StandardAnswer:
    def get_ok_synonymous(self):
       rnd=random.randint(0, len(self.ok_synonymous)-1)
       return self.ok_synonymous[rnd]
+
+   def get_question_reply(self, sentence_info, options):
+
+      rnd=random.randint(0, len(options)-1)
+      g=structures.gender(options[rnd])
+      article='un'
+      if g==FEMALE:
+         article='una'
+
+      if sentence_info['relation'] == 'IS-A':
+         text="Es "+article+" "+options[rnd]
+
+      if sentence_info['relation'] == 'HAS-ATTRIBUTE':
+         text="Es "+options[rnd]
+
+      return text
+
+
+
