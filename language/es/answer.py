@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import language.es.pattern_utils as pattern_utils
+from pattern.es import parsetree, parse
 from pattern.es import conjugate, lemma, lexeme, tenses
 from pattern.es import singularize, pluralize, attributive, MALE, SINGULAR
 from pattern.es import MALE, FEMALE
@@ -34,19 +35,20 @@ class Answer:
       if len(options)==0:
          return "No lo se"
 
-      rnd=random.randint(0, len(options)-1)
-      g=pattern_utils.gender(options[rnd])
-      article='un'
-      if g==FEMALE:
-         article='una'
-
       if sentence_info['relation'] == 'IS-A':
-         text="Es "+article+" "+options[rnd]
+         rnd=random.randint(0, len(options)-1)
+         text="Es un "+options[rnd]
+         # TODO: "un" must be checked
+         return text
 
       if sentence_info['relation'] == 'HAS-ATTRIBUTE':
-         text="Es "+options[rnd]
+         rnd=random.randint(0, len(options)-1)
 
-      return text
+         for cnt in range(len(options)):
+            if parsetree(options[rnd]).words[0].type[0:2]=='JJ':
+               return "Es "+options[rnd]
+
+      return "No lo se"
 
 
 

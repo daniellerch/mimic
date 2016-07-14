@@ -37,7 +37,7 @@ class knowledge_base:
          cur = self.con.cursor()    
          cur.execute("select dst from relations_n2 "
             "where src='"+str(self.object_id(src))+"' "
-            "and relation='"+rel+"';")
+            "and (relation='"+rel+"' or relation='IS-A');")
 
          data=cur.fetchall()
          for r in data:
@@ -136,7 +136,13 @@ class knowledge_base:
    def query_dst(self, rel, src): 
       results=[]
       try:
+         # IS-A relation is implicit in all relations. 
          self.get_inherited_properties(src, rel, results)
+
+         #When we receibe an IS-A question we add HAS-ATTRIBUTE. 
+         if rel=='IS-A':
+            self.get_inherited_properties(src, 'HAS-ATTRIBUTE', results)
+
          return results
 
       except sqlite3.Error, e:
