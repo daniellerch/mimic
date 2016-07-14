@@ -225,6 +225,14 @@ def gender(noun):
       return MALE
 # }}}
 
+# {{{ Word_list_to_Text()
+def Word_list_to_Text(Word_list):
+   string=''
+   for w in Word_list:
+      string+=w.string+' '
+   
+   return parsetree(string)
+# }}}
 
 # {{{ get_quantifier_from_NN_JJ()
 def get_quantifier_from_NN_JJ(noun):
@@ -267,6 +275,43 @@ def parse_NP(words):
    noun=""
    properties=[]
 
+
+   t=Word_list_to_Text(words)
+
+   
+   #NP    noun phrase                DT+RB+JJ+NN + PR     the strange bird
+
+
+   # Example: todos los perros
+   m=pattern_match("{DT} {DT} {JJ*|NN*}", t)
+   if m and len(m)==len(t.words):
+      noun = singularize(m.group(3)[0].string)
+      quantifier=get_quantifier_from_DT(m.group(1)[0].string)
+      return quantifier, noun, properties
+
+   # Example: el perro
+   m=pattern_match("{DT} {JJ*|NN*}", t)
+   if m and len(m)==len(t.words):
+      noun = singularize(m.group(2)[0].string)
+      quantifier=get_quantifier_from_DT(m.group(1)[0].string)
+      return quantifier, noun, properties
+
+   # Example: verde
+   m=pattern_match("{JJ*|NN*}", t)
+   if m and len(m)==len(t.words):
+      noun=m.group(1)[0].string
+      quantifier="one"
+      if noun==pluralize(noun):
+         quantifier="all"
+      noun = singularize(noun)
+    
+      return quantifier, noun, properties
+
+   print "parse_NP() : not found", t
+   sys.exit(0)
+
+
+   """
    # NNP
    if len(words)==1 and \
       words[0].tag[:3]=="NNP":
@@ -341,7 +386,7 @@ def parse_NP(words):
       print "ERROR: parse_NP(): not found!"
       print words
       sys.exit(0)
-
+   """
 
    return quantifier, noun, properties
 # }}}
