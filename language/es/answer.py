@@ -6,7 +6,7 @@ from pattern.es import parsetree, parse
 from pattern.es import conjugate, lemma, lexeme, tenses
 from pattern.es import singularize, pluralize, attributive, MALE, SINGULAR
 from pattern.es import MALE, FEMALE
-
+from knowledge import knowledge_base
 import random
 
 class Answer:
@@ -37,8 +37,11 @@ class Answer:
 
       if sentence_info['relation'] == 'IS-A':
          rnd=random.randint(0, len(options)-1)
-         text="Es un "+options[rnd]
-         # TODO: "un" must be checked
+         concept=knowledge_base.Concept(options[rnd])
+         if concept.get_gender()=='f':
+            text="Es una "+options[rnd]
+         else:
+            text="Es un "+options[rnd]
          return text
 
       if sentence_info['relation'] == 'HAS-ATTRIBUTE':
