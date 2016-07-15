@@ -1,11 +1,7 @@
 
 
-   [ ].- Sustitución de sqlite por pattern.graph (???)
-
-   [ ].- Uso como servicio web.
-   [ ].- Síntesis de voz a través del navegador.
-   [ ].- Reconocimiento de voz a través del navegador.
-   [ ].- Acceso a imágenes a través del navegador.
+   - No parece que los quantificadores tengan sentido en la tabla de relaciones.
+   - Acceso a imágenes a través del navegador.
 
 
 

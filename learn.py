@@ -22,6 +22,7 @@ if __name__ == '__main__':
             if r!="":
                print ">", l[:-1]
                print "<", r
+               print "--"
          
 
 

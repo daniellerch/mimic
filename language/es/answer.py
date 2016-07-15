@@ -24,6 +24,10 @@ class Answer:
       self.ok_synonymous.append( u"Me lo apunto" )
       self.ok_synonymous.append( u"Estupendo" )
       self.ok_synonymous.append( u"Gracias por la información" )
+      self.ok_synonymous.append( u"Interesante" )
+      self.ok_synonymous.append( u"Muy instructivo" )
+      self.ok_synonymous.append( u"Fantástico" )
+      self.ok_synonymous.append( u"Que bien" )
 
 
    def get_ok_synonymous(self):
