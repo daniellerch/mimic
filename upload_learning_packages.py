@@ -7,7 +7,7 @@ from language.chatbot import chatbot
 if __name__ == '__main__':
 
    cb=chatbot()
-   files=glob.glob("learning_packages/*.fact")
+   files=glob.glob("learn/*.text")
 
    cb.clean_memory()
 
@@ -20,7 +20,8 @@ if __name__ == '__main__':
          if l[:1]!='#': # ignore comments
             r=cb.talk(l)
             if r!="":
-               print r, "(", l[:-1], ")"
+               print ">", l[:-1]
+               print "<", r
          
 
 
