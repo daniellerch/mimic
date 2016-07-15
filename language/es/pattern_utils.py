@@ -199,6 +199,8 @@ from pattern.es import MALE, FEMALE
 from random import randint
 from pattern.text.tree import Text
 
+from knowledge.knowledge_base import Concept
+
 
 # {{{ pattern_match()
 def pattern_match(pattern, sentence):
@@ -214,15 +216,22 @@ def pattern_match(pattern, sentence):
       return None
 # }}}
 
-# {{{ gender()
-def gender(noun):
-   """Return the gender of the noun"""
-   s=singularize(noun)
-   f=attributive(noun, FEMALE+SINGULAR)
-   if s==f:
-      return FEMALE
-   else: 
-      return MALE
+# {{{ learn_gender()
+def learn_gender(dt, noun):
+   
+   male_words=["el", "un", "uno", "unos", "los", "todos", "algunos", "algun"]
+   female_words=["la", "una", "unas", "las", "todas", "algunas", "alguna"]
+
+   
+   concept=Concept(noun)
+
+   if dt in female_words:
+      concept.set_gender('f')
+   else:
+      concept.set_gender('m')
+      
+   return
+
 # }}}
 
 # {{{ Word_list_to_Text()
@@ -287,6 +296,7 @@ def parse_NP(words):
    if m and len(m)==len(t.words):
       noun = singularize(m.group(3)[0].string)
       quantifier=get_quantifier_from_DT(m.group(1)[0].string)
+      learn_gender(m.group(2)[0].string, noun)
       return quantifier, noun, properties
 
    # Example: el perro
@@ -294,6 +304,7 @@ def parse_NP(words):
    if m and len(m)==len(t.words):
       noun = singularize(m.group(2)[0].string)
       quantifier=get_quantifier_from_DT(m.group(1)[0].string)
+      learn_gender(m.group(1)[0].string, noun)
       return quantifier, noun, properties
 
    # Example: verde

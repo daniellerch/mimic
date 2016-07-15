@@ -3,6 +3,74 @@ import sys
 import sqlite3
 import logging
 
+
+class Concept:
+
+   # {{{ __init__()
+   def __init__(self, name):
+
+      self.kb=knowledge_base()
+
+      try:
+         cur = self.kb.con.cursor()    
+         cur.execute("select id, gender from concepts where name='"+name+"';")
+         data=cur.fetchall()
+         
+         if len(data)>0:
+            concept_id=data[0]["id"]
+            gender=data[0]["gender"]
+         else:
+            cur.execute("insert into concepts (name) values ('"+name+"');")
+            self.kb.con.commit()
+            concept_id=cur.lastrowid
+            gender='m'
+
+      except sqlite3.Error, e:
+         print e
+         print "Error %s:" % e.args[0]
+         sys.exit(1)
+
+      self.id=concept_id
+      self.name=name
+      self.gender=gender
+   # }}}
+
+   # {{{ set_gender()
+   def set_gender(self, gender='m'):
+
+      name=self.name
+      try:
+         cur = self.kb.con.cursor()    
+         cur.execute("select gender, gender_score \
+            from concepts where id='"+str(self.id)+"';")
+         data=cur.fetchall()
+         
+         if len(data)>0:
+            if data[0]["gender"]==gender:
+               cur.execute("update concepts set gender_score=gender_score+1 \
+                  where id='"+str(self.id)+"';")
+            elif data[0]["gender_score"]>0:
+               cur.execute("update concepts set gender_score=gender_score-1 \
+                  where id='"+str(self.id)+"';")
+            else:
+               cur.execute("update concepts set gender='"+gender+"', \
+                  gender_score=1 where id='"+str(self.id)+"';")
+
+            self.kb.con.commit()
+
+      except sqlite3.Error, e:
+         print e
+         print "Error %s:" % e.args[0]
+         sys.exit(1)
+
+      return
+   # }}}
+
+   # {{{ get_gender()
+   def get_gender(self):
+      return self.gender
+   # }}}
+
 class knowledge_base:
 
    # {{{ __init__()
@@ -29,19 +97,19 @@ class knowledge_base:
    # }}}
 
    # {{{ get_inherited_properties():
-   # Inference based in inheritance: The idea of this is that if an object 
+   # Inference based in inheritance: The idea of this is that if an concept 
    # belongs to a class (indicated by an IS_A link) it inherits all the 
    # properties of that class
    def get_inherited_properties(self, src, rel, results):
       try:
          cur = self.con.cursor()    
          cur.execute("select dst from relations_n2 "
-            "where src='"+str(self.object_id(src))+"' "
+            "where src='"+str(self.concept_id(src))+"' "
             "and (relation='"+rel+"' or relation='IS-A');")
 
          data=cur.fetchall()
          for r in data:
-            dst_name=self.object_name(r["dst"])
+            dst_name=self.concept_name(r["dst"])
             self.get_inherited_properties(dst_name, rel, results)
             results.append(dst_name)
        
@@ -69,33 +137,33 @@ class knowledge_base:
          sys.exit(1)
    # }}}
 
-   # {{{ object_id()
-   def object_id(self, name):
+   # {{{ concept_id()
+   def concept_id(self, name):
       try:
          cur = self.con.cursor()    
          cur.execute("select id from concepts where name='"+name+"';")
          data=cur.fetchall()
          
          if len(data)>0:
-            object_id=data[0]["id"]
+            concept_id=data[0]["id"]
          else:
             cur.execute("insert into concepts (name) values ('"+name+"');")
             self.con.commit()
-            object_id=cur.lastrowid
+            concept_id=cur.lastrowid
 
       except sqlite3.Error, e:
          print e
          print "Error %s:" % e.args[0]
          sys.exit(1)
 
-      return object_id
+      return concept_id
    # }}}
 
-   # {{{ object_name()
-   def object_name(self, object_id):
+   # {{{ concept_name()
+   def concept_name(self, concept_id):
       try:
          cur = self.con.cursor()    
-         cur.execute("select name from concepts where id='"+str(object_id)+"';")
+         cur.execute("select name from concepts where id='"+str(concept_id)+"';")
          data=cur.fetchall()
          
          if len(data)>0:
@@ -112,8 +180,8 @@ class knowledge_base:
    # {{{ add_2n_relation()
    def add_2n_relation(self, idu, rel, src_q, src, dst_q, dst):
 
-      src_id=self.object_id(src) 
-      dst_id=self.object_id(dst) 
+      src_id=self.concept_id(src) 
+      dst_id=self.concept_id(dst) 
      
       try:
          cur = self.con.cursor()    
@@ -132,8 +200,8 @@ class knowledge_base:
          sys.exit(1)
    # }}}
 
-   # {{{ query_dst()
-   def query_dst(self, rel, src): 
+   # {{{ query_2n_relation()
+   def query_2n_relation(self, rel, src): 
       results=[]
       try:
          # IS-A relation is implicit in all relations. 

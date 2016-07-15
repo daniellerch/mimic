@@ -43,7 +43,7 @@ class chatbot:
          return answer.get_ok_synonymous()
 
       elif sentence_info["type"]=="query":
-         results=self.kb.query_dst(
+         results=self.kb.query_2n_relation(
             sentence_info["relation"], 
             sentence_info["object"]
          )
