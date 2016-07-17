@@ -15,13 +15,14 @@ class nlp:
       sentence=sentence.lower()
       sentence=pattern_utils.sentence_pre_processing(sentence)
 
-      t = parsetree(sentence, lemmata=True)
+      #t = parsetree(sentence, lemmata=True)
+      t = sentence
     
-      r=greetings.process(t)
-      if r: return r
+      #r=greetings.process(t)
+      #if r: return r
 
-      r=questions.process(t)
-      if r: return r
+      #r=questions.process(t)
+      #if r: return r
 
       r=relations.process(t)
       if r: return r

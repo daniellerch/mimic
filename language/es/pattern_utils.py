@@ -409,12 +409,12 @@ def sentence_pre_processing(sentence):
    # - Preprocess personal names juan->Juan 
 
    # Easy tagging
-   sentence=sentence.replace(' del ', ' de el ')
+   #sentence=sentence.replace(' del ', ' de el ')
 
 
 
-   if sentence[-1:]=='.':
-      sentence = sentence[:-1]
+   #if sentence[-1:]=='.':
+   #   sentence = sentence[:-1]
    return sentence
 # }}}
 

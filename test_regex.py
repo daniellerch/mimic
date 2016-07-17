@@ -16,7 +16,7 @@ if __name__ == '__main__':
       for l in lines:
          l=l[:-1]+"."
          print l
-         m = re.search('(\w+) (\w+) (es|son) (\w+) (\w+).', l)
+         m = re.search('(\w+) (\w+) (es|son) (\w+) (\w+).', l, re.UNICODE)
          if m:
             print "grp: ", m.group(2), ":", m.group(5)
          print "--"

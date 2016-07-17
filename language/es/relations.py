@@ -1,8 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import sys
+import re
 import language.es.pattern_utils as pattern_utils
-
+import language.es.words as words
 
 
 # {{{ process()
@@ -120,33 +122,31 @@ def process_is_part_of(t):
 # {{{ process_is_a()
 def process_is_a(t):
 
+   r=dict()
+   r['code']=0
+
+   dart="|".join(words.definite_articles)
+   iart="|".join(words.indefinite_articles)
+   relation="|".join(words.is_a)
+
+   print t
+
    while True:
-
-      m=pattern_utils.pattern_match("{NP} ser {NP}", t)
-      if m: break
-
-      m=pattern_utils.pattern_match("{JJ*} ser {NP}", t)
-      if m: break
+      # Un perro es un animal
+      ms = '('+iart+'|'+dart+') (\w+) ('+relation+') ('+iart+') (\w+).'
+      m = re.search(ms, t, re.UNICODE)
+      if m: 
+         a1, w1, a2, w2 = m.group(1), m.group(2), m.group(4), m.group(5)
+         r["source_quantifier"]='all'
+         r["destination_quantifier"]='all'
+         break
 
       return None
 
 
-   Aq, An, Aprop = pattern_utils.parse_NP(m.group(1))
-   Bq, Bn, Bprop = pattern_utils.parse_NP(m.group(2))
-
-   r=dict()
-
-   if Aq!="exist": 
-      Aq="all"
-   if Bq!="exist": 
-      Bq="all"
-
-   r['code']=0
    r["type"]="relation"
-   r["source_quantifier"]=Aq
-   r["source"]=An
-   r["destination_quantifier"]=Bq
-   r["destination"]=Bn
+   r["source"]=w1
+   r["destination"]=w2
    r["relation"]='IS-A'
 
    return r
