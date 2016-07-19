@@ -13,21 +13,21 @@ class Answer:
 
    def __init__(self):
        
-      self.ok_synonymous=[]
-      self.ok_synonymous.append( u"De acuerdo" )
-      self.ok_synonymous.append( u"Vale" )
-      self.ok_synonymous.append( u"Genial!" )
-      self.ok_synonymous.append( u"Muy bien" )
-      self.ok_synonymous.append( u"Bien" )
-      self.ok_synonymous.append( u"Perfecto" )
-      self.ok_synonymous.append( u"Tomo nota" )
-      self.ok_synonymous.append( u"Me lo apunto" )
-      self.ok_synonymous.append( u"Estupendo" )
-      self.ok_synonymous.append( u"Gracias por la información" )
-      self.ok_synonymous.append( u"Interesante" )
-      self.ok_synonymous.append( u"Muy instructivo" )
-      self.ok_synonymous.append( u"Fantástico" )
-      self.ok_synonymous.append( u"Que bien" )
+      self.ok_synonymous=[
+         u"De acuerdo",
+         u"Vale",
+         u"Genial!",
+         u"Muy bien",
+         u"Bien",
+         u"Perfecto",
+         u"Tomo nota",
+         u"Me lo apunto",
+         u"Estupendo",
+         u"Gracias por la información",
+         u"Interesante",
+         u"Muy instructivo",
+         u"Fantástico",
+         u"Que bien"]
 
 
    def get_ok_synonymous(self):
@@ -51,9 +51,7 @@ class Answer:
       if sentence_info['relation'] == 'HAS-ATTRIBUTE':
          rnd=random.randint(0, len(options)-1)
 
-         print "xx", options
          for cnt in range(len(options)):
-            print parsetree(options[cnt])
             if parsetree(options[cnt]).words[0].type[0:2]=='JJ':
                return "Es "+options[cnt]
 
