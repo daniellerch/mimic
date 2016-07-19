@@ -2,7 +2,7 @@
 
 import sys
 import glob
-from language.chatbot import chatbot
+from manager.chatbot import chatbot
 
 if __name__ == '__main__':
 

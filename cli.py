@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import sys
-from language.chatbot import chatbot
+from manager.chatbot import chatbot
 
 if __name__ == '__main__':
 
