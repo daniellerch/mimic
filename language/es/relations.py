@@ -127,7 +127,9 @@ def process_is_a(t):
 
    dart="|".join(words.definite_articles)
    iart="|".join(words.indefinite_articles)
-   relation="|".join(words.is_a_relation)
+   relation="|".join(words.is_a)
+
+   print t
 
    while True:
       # Un perro es un animal
