@@ -1,0 +1,22 @@
+INPUT|TIME|OUTPUT
+hola|always|hola
+hola|always|buenas
+buenas|always|hola
+buenas|always|buenas
+que tal|always|bien
+que tal|always|estoy bien, gracias
+que tal|always|estoy bien, gracias por preguntar
+que tal|always|bien, gracias
+que tal|always|bien, gracias por preguntar
+como estas|always|bien
+como estas|always|estoy bien, gracias
+como estas|always|estoy bien, gracias por preguntar
+como estas|always|bien, gracias
+como estas|always|bien, gracias por preguntar
+como va|always|bien
+como va|always|muy bien
+como va|always|bien, gracias
+como va|always|muy bien, gracias
+buenos dias|morning|buenos dias
+buenas tardes|afternoon|buenas tardes
+buenas noches|night|buenas noches

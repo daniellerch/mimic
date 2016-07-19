@@ -30,14 +30,9 @@ def process(t):
 # {{{ process_has_attribute()
 def process_has_attribute(t):
 
-   while True:
-
-      m=pattern_utils.pattern_match("{NP} ser {JJ*}", t)
-      if m: break
-
+   m=pattern_utils.pattern_match("{NP} ser {JJ*}", t)
+   if not m:
       return None
-
-   print m
 
    Aq, An, Aprop = pattern_utils.parse_NP(m.group(1))
    Bq, Bn, Bprop = pattern_utils.parse_NP(m.group(2))
@@ -57,20 +52,11 @@ def process_has_attribute(t):
 # {{{ process_is_property_of()
 def process_is_property_of(t):
 
-   while True:
-
-      m=pattern_utils.pattern_match("{NP} pertenecer a {NP}", t)
-      if m: break
-
-      m=pattern_utils.pattern_match("{NP} ser propiedad de {NP}", t)
-      if m: break
-
-      m=pattern_utils.pattern_match("{NP} ser de {NP}", t)
-      if m: break
-
+   m = ( pattern_utils.pattern_match("{NP} pertenecer a {NP}", t) or
+         pattern_utils.pattern_match("{NP} ser propiedad de {NP}", t) or
+         pattern_utils.pattern_match("{NP} ser de {NP}", t) )
+   if not m: 
       return None
-
-   print m
 
    Aq, An, Aprop = pattern_utils.parse_NP(m.group(1))
    Bq, Bn, Bprop = pattern_utils.parse_NP(m.group(2))
@@ -90,17 +76,10 @@ def process_is_property_of(t):
 # {{{ process_is_part_of()
 def process_is_part_of(t):
 
-   while True:
-
-      m=pattern_utils.pattern_match("{NP} ser parte de {NP}", t)
-      if m: break
-
-      m=pattern_utils.pattern_match("{NP} formar parte de {NP}", t)
-      if m: break
-
+   m = ( pattern_utils.pattern_match("{NP} ser parte de {NP}", t) or
+         pattern_utils.pattern_match("{NP} formar parte de {NP}", t) )
+   if not m:
       return None
-
-   print m
 
    Aq, An, Aprop = pattern_utils.parse_NP(m.group(1))
    Bq, Bn, Bprop = pattern_utils.parse_NP(m.group(2))
@@ -120,14 +99,10 @@ def process_is_part_of(t):
 # {{{ process_is_a()
 def process_is_a(t):
 
-   while True:
+   m = ( pattern_utils.pattern_match("{NP} ser {NP}", t) or
+         pattern_utils.pattern_match("{JJ*} ser {NP}", t) )
 
-      m=pattern_utils.pattern_match("{NP} ser {NP}", t)
-      if m: break
-
-      m=pattern_utils.pattern_match("{JJ*} ser {NP}", t)
-      if m: break
-
+   if not m:
       return None
 
 
@@ -155,17 +130,10 @@ def process_is_a(t):
 # {{{ process_contains()
 def process_contains(t):
 
-   while True:
-
-      m=pattern_utils.pattern_match("{NP} contiene {NP}", t)
-      if m: break
-
-      m=pattern_utils.pattern_match("{NP} tener dentro {NP}", t)
-      if m: break
-
+   m = ( pattern_utils.pattern_match("{NP} contiene {NP}", t) or
+         pattern_utils.pattern_match("{NP} tener dentro {NP}", t) )
+   if not m:
       return None
-
-   print m
 
    Aq, An, Aprop = pattern_utils.parse_NP(m.group(1))
    Bq, Bn, Bprop = pattern_utils.parse_NP(m.group(2))

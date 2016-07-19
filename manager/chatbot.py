@@ -38,18 +38,12 @@ class chatbot:
 
       t = parsetree(sentence, lemmata=True)
 
-      while True:
+      sentence_info = ( greetings.process(t) or
+                        questions.process(t) or
+                        relations.process(t) )
 
-         sentence_info=greetings.process(t)
-         if sentence_info: break
-
-         sentence_info=questions.process(t)
-         if sentence_info: break
-
-         sentence_info=relations.process(t)
-         if sentence_info: break
-
-         answer.get_unknown_command()
+      if not sentence_info:
+         return answer.get_unknown_command()
 
 
       if sentence_info.has_key('code') and sentence_info["code"]!=0:

@@ -8,4 +8,5 @@ default:
 
 clean:
 	rm -f cli.c learn.c *.bin
+	rm -f */*.pyc */*/*.pyc
 
