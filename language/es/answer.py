@@ -51,9 +51,11 @@ class Answer:
       if sentence_info['relation'] == 'HAS-ATTRIBUTE':
          rnd=random.randint(0, len(options)-1)
 
+         print "xx", options
          for cnt in range(len(options)):
-            if parsetree(options[rnd]).words[0].type[0:2]=='JJ':
-               return "Es "+options[rnd]
+            print parsetree(options[cnt])
+            if parsetree(options[cnt]).words[0].type[0:2]=='JJ':
+               return "Es "+options[cnt]
 
       return "No lo se"
 
