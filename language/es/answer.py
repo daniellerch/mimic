@@ -53,6 +53,14 @@ class Answer:
             text="Es un "+options[rnd]
          return text
 
+      if sentence_info['relation'] == 'HAS':
+         rnd=random.randint(0, len(options)-1)
+         concept=knowledge_base.Concept(options[rnd])
+         text="Tienen "+options[rnd]
+         return text
+
+
+
       if sentence_info['relation'] == 'HAS-ATTRIBUTE':
          rnd=random.randint(0, len(options)-1)
 

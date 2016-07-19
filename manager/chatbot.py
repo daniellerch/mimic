@@ -52,6 +52,7 @@ class chatbot:
          answer.get_unknown_command()
 
 
+
       if sentence_info.has_key('code') and sentence_info["code"]!=0:
          return sentence_info["error_message"]
 

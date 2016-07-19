@@ -23,6 +23,8 @@ def process(t):
    r=process_contains(t)
    if r: return r
 
+   r=process_has(t)
+   if r: return r
 
    return None
 # }}}
@@ -182,6 +184,32 @@ def process_contains(t):
    return r
 # }}}
 
+# {{{ process_has()
+def process_has(t):
+
+   while True:
+
+      m=pattern_utils.pattern_match("{NP} tener {NP}", t)
+      if m: break
+
+      return None
+
+   print m
+
+   Aq, An, Aprop = pattern_utils.parse_NP(m.group(1))
+   Bq, Bn, Bprop = pattern_utils.parse_NP(m.group(2))
+
+   r=dict()
+   r['code']=0
+   r["type"]="relation"
+   r["source_quantifier"]=Aq
+   r["source"]=An
+   r["destination_quantifier"]=Bq
+   r["destination"]=Bn
+   r["relation"]='HAS'
+
+   return r
+# }}}
 
 
 

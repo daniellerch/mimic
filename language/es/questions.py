@@ -23,6 +23,14 @@ def process(t):
       r['object']=n
       return r
 
+   m=pattern_utils.pattern_match("que tener {NP}", t)
+   if m:
+      q, n, p = pattern_utils.parse_NP(m.group(1))
+      r=dict()
+      r['type']='query'
+      r['relation']='HAS'
+      r['object']=n
+      return r
 
 
 
