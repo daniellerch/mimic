@@ -1,8 +1,15 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 
-from language.nlp import nlp
 from knowledge.knowledge_base import knowledge_base
 from language.es.answer import Answer
-import logging
+from pattern.es import parsetree
+import language.es.pattern_utils as pattern_utils
+import language.es.greetings as greetings
+import language.es.questions as questions
+import language.es.relations as relations
+
+
 
 
 class chatbot:
@@ -10,7 +17,6 @@ class chatbot:
 	# {{{ __init__  
    def __init__(self):
       self.kb=knowledge_base()
-      self.nlp=nlp()
    # }}}
 
    # {{{ clean_memory()
@@ -25,7 +31,25 @@ class chatbot:
       if human_input[-1:]!='.':
          human_input+='.'
 
-      sentence_info=self.nlp.parse_sentence(human_input)
+      sentence=human_input.lower()
+      sentence=pattern_utils.sentence_pre_processing(sentence)
+
+      t = parsetree(sentence, lemmata=True)
+    
+      while True:
+
+         sentence_info=greetings.process(t)
+         if sentence_info: break
+
+         sentence_info=questions.process(t)
+         if sentence_info: break
+
+         sentence_info=relations.process(t)
+         if sentence_info: break
+
+         return u"No te he entendido. ¿Podrías reformular la frase?"
+
+
       answer = Answer()
 
       if sentence_info.has_key('code') and sentence_info["code"]!=0:
