@@ -31,11 +31,13 @@ class chatbot:
       if human_input[-1:]!='.':
          human_input+='.'
 
+      answer = Answer()
+
       sentence=human_input.lower()
       sentence=pattern_utils.sentence_pre_processing(sentence)
 
       t = parsetree(sentence, lemmata=True)
-    
+
       while True:
 
          sentence_info=greetings.process(t)
@@ -47,10 +49,8 @@ class chatbot:
          sentence_info=relations.process(t)
          if sentence_info: break
 
-         return u"No te he entendido. ¿Podrías reformular la frase?"
+         answer.get_unknown_command()
 
-
-      answer = Answer()
 
       if sentence_info.has_key('code') and sentence_info["code"]!=0:
          return sentence_info["error_message"]
@@ -77,7 +77,7 @@ class chatbot:
          return sentence_info["message"]
 
 
-      return "Vaya, parece que tengo un problema interno"
+      return answer.get_internal_error()
    # }}}
 
 

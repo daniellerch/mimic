@@ -29,6 +29,11 @@ class Answer:
          u"Fantástico",
          u"Que bien"]
 
+   def get_unknown_command():
+      return u"No te he entendido. ¿Podrías reformular la frase?"
+
+   def get_internal_error():
+      return "Vaya, parece que tengo un problema interno"
 
    def get_ok_synonymous(self):
       rnd=random.randint(0, len(self.ok_synonymous)-1)
