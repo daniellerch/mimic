@@ -2,11 +2,14 @@
 # -*- coding: utf-8 -*-
 
 import language.es.pattern_utils as pattern_utils
+from pattern.es import parsetree
 
 
 
 # {{{ process()
-def process(t):
+def process(sentence):
+
+   t = parsetree(sentence, lemmata=True)
 
    r=process_has_attribute(t)
    if r: return r

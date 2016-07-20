@@ -3,7 +3,6 @@
 
 import knowledge.knowledge_base as knowledge_base
 from language.es.answer import Answer
-from pattern.es import parsetree
 import language.es.pattern_utils as pattern_utils
 import language.es.greetings as greetings
 import language.es.questions as questions
@@ -17,7 +16,9 @@ class chatbot:
 	# {{{ __init__  
    def __init__(self, user='MASTER', lang='es'):
       self.kb=knowledge_base.knowledge_base()
-      self.user=knowledge_base.User(user)
+      u=knowledge_base.User(user)
+      self.id_user=u.id
+      print self.id_user
    # }}}
 
    # {{{ clean_memory()
@@ -37,11 +38,9 @@ class chatbot:
       sentence=human_input.lower()
       sentence=pattern_utils.sentence_pre_processing(sentence)
 
-      t = parsetree(sentence, lemmata=True)
-
-      sentence_info = ( greetings.process(t) or
-                        questions.process(t) or
-                        relations.process(t) )
+      sentence_info = ( greetings.process(sentence) or
+                        questions.process(sentence) or
+                        relations.process(sentence) )
 
       if not sentence_info:
          return answer.get_unknown_command()
@@ -51,7 +50,7 @@ class chatbot:
 
       if sentence_info["type"]=="relation":
          self.kb.add_2n_relation(
-            0,    
+            self.id_user,    
             sentence_info["relation"], 
             sentence_info["source_quantifier"], 
             sentence_info["source"], 

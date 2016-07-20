@@ -3,10 +3,12 @@
 
 import language.es.pattern_utils as pattern_utils
 from random import randint
+from pattern.es import parsetree
 
 # {{{ process()
-def process(t):
+def process(sentence):
 
+   t = parsetree(sentence, lemmata=True)
    greeting=t.string.strip()
 
    greeting_list_q=["hola", "buenas"]
