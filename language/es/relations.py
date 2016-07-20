@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import language.es.pattern_utils as pattern_utils
-from pattern.es import parsetree
-
+from pattern.es import parsetree, conjugate, INFINITIVE
 
 
 # {{{ process()
@@ -11,108 +10,13 @@ def process(sentence):
 
    t = parsetree(sentence, lemmata=True)
 
-   r=process_has_attribute(t)
-   if r: return r
-  
-   r=process_is_property_of(t)
-   if r: return r
-  
-   r=process_is_part_of(t)
-   if r: return r
-
-   r=process_is_a(t)
-   if r: return r
-
-   r=process_contains(t)
-   if r: return r
-
-   r=process_has(t)
-   if r: return r
-
-   return None
-# }}}
-
-# {{{ process_has_attribute()
-def process_has_attribute(t):
-
-   m=pattern_utils.pattern_match("{NP} ser {JJ*}", t)
+   m = pattern_utils.pattern_match("{*} {VP} {*}", t)
    if not m:
       return None
 
    Aq, An, Aprop = pattern_utils.parse_NP(m.group(1))
-   Bq, Bn, Bprop = pattern_utils.parse_NP(m.group(2))
-
-   r=dict()
-   r['code']=0
-   r["type"]="relation"
-   r["source_quantifier"]=Aq
-   r["source"]=An
-   r["destination_quantifier"]=Bq
-   r["destination"]=Bn
-   r["relation"]='HAS-ATTRIBUTE'
-
-   return r
-# }}}
-
-# {{{ process_is_property_of()
-def process_is_property_of(t):
-
-   m = ( pattern_utils.pattern_match("{NP} pertenecer a {NP}", t) or
-         pattern_utils.pattern_match("{NP} ser propiedad de {NP}", t) or
-         pattern_utils.pattern_match("{NP} ser de {NP}", t) )
-   if not m: 
-      return None
-
-   Aq, An, Aprop = pattern_utils.parse_NP(m.group(1))
-   Bq, Bn, Bprop = pattern_utils.parse_NP(m.group(2))
-
-   r=dict()
-   r['code']=0
-   r["type"]="relation"
-   r["source_quantifier"]=Aq
-   r["source"]=An
-   r["destination_quantifier"]=Bq
-   r["destination"]=Bn
-   r["relation"]='PROPERTY-OF'
-
-   return r
-# }}}
-
-# {{{ process_is_part_of()
-def process_is_part_of(t):
-
-   m = ( pattern_utils.pattern_match("{NP} ser parte de {NP}", t) or
-         pattern_utils.pattern_match("{NP} formar parte de {NP}", t) )
-   if not m:
-      return None
-
-   Aq, An, Aprop = pattern_utils.parse_NP(m.group(1))
-   Bq, Bn, Bprop = pattern_utils.parse_NP(m.group(2))
-
-   r=dict()
-   r['code']=0
-   r["type"]="relation"
-   r["source_quantifier"]=Aq
-   r["source"]=An
-   r["destination_quantifier"]=Bq
-   r["destination"]=Bn
-   r["relation"]='IS-PART-OF'
-
-   return r
-# }}}
-
-# {{{ process_is_a()
-def process_is_a(t):
-
-   m = ( pattern_utils.pattern_match("{NP} ser {NP}", t) or
-         pattern_utils.pattern_match("{JJ*} ser {NP}", t) )
-
-   if not m:
-      return None
-
-
-   Aq, An, Aprop = pattern_utils.parse_NP(m.group(1))
-   Bq, Bn, Bprop = pattern_utils.parse_NP(m.group(2))
+   Bq, Bn, Bprop = pattern_utils.parse_NP(m.group(3))
+   print "VP", m.group(2).string
 
    r=dict()
 
@@ -127,60 +31,9 @@ def process_is_a(t):
    r["source"]=An
    r["destination_quantifier"]=Bq
    r["destination"]=Bn
-   r["relation"]='IS-A'
+   r["relation"]=conjugate(m.group(2).string, INFINITIVE)
+
 
    return r
 # }}}
-
-# {{{ process_contains()
-def process_contains(t):
-
-   m = ( pattern_utils.pattern_match("{NP} contiene {NP}", t) or
-         pattern_utils.pattern_match("{NP} tener dentro {NP}", t) )
-   if not m:
-      return None
-
-   Aq, An, Aprop = pattern_utils.parse_NP(m.group(1))
-   Bq, Bn, Bprop = pattern_utils.parse_NP(m.group(2))
-
-   r=dict()
-   r['code']=0
-   r["type"]="relation"
-   r["source_quantifier"]=Aq
-   r["source"]=An
-   r["destination_quantifier"]=Bq
-   r["destination"]=Bn
-   r["relation"]='CONTAINS'
-
-   return r
-# }}}
-
-# {{{ process_has()
-def process_has(t):
-
-   while True:
-
-      m=pattern_utils.pattern_match("{NP} tener {NP}", t)
-      if m: break
-
-      return None
-
-   print m
-
-   Aq, An, Aprop = pattern_utils.parse_NP(m.group(1))
-   Bq, Bn, Bprop = pattern_utils.parse_NP(m.group(2))
-
-   r=dict()
-   r['code']=0
-   r["type"]="relation"
-   r["source_quantifier"]=Aq
-   r["source"]=An
-   r["destination_quantifier"]=Bq
-   r["destination"]=Bn
-   r["relation"]='HAS'
-
-   return r
-# }}}
-
-
 

@@ -12,7 +12,8 @@ def process(sentence):
       q, n, p = pattern_utils.parse_NP(m.group(1))
       r=dict()
       r['type']='query'
-      r['relation']='IS-A'
+      r['question']='que'
+      r['relation']='ser'
       r['object']=n
       return r
 
@@ -21,7 +22,8 @@ def process(sentence):
       q, n, p = pattern_utils.parse_NP(m.group(1))
       r=dict()
       r['type']='query'
-      r['relation']='HAS-ATTRIBUTE'
+      r['question']='como'
+      r['relation']='ser'
       r['object']=n
       return r
 
@@ -30,7 +32,8 @@ def process(sentence):
       q, n, p = pattern_utils.parse_NP(m.group(1))
       r=dict()
       r['type']='query'
-      r['relation']='HAS'
+      r['question']='que'
+      r['relation']='tener'
       r['object']=n
       return r
 

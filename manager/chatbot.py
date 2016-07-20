@@ -18,6 +18,7 @@ class chatbot:
       self.kb=knowledge_base.knowledge_base()
       u=knowledge_base.User(user)
       self.id_user=u.id
+      self.lang=lang
       print self.id_user
    # }}}
 

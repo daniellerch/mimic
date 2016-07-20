@@ -29,10 +29,10 @@ class Answer:
          u"Fantástico",
          u"Que bien"]
 
-   def get_unknown_command():
+   def get_unknown_command(self):
       return u"No te he entendido. ¿Podrías reformular la frase?"
 
-   def get_internal_error():
+   def get_internal_error(self):
       return "Vaya, parece que tengo un problema interno"
 
    def get_ok_synonymous(self):
@@ -44,7 +44,8 @@ class Answer:
       if len(options)==0:
          return "No lo se"
 
-      if sentence_info['relation'] == 'IS-A':
+      if (sentence_info['question']=='que' and 
+          sentence_info["relation"]=="ser"):
          rnd=random.randint(0, len(options)-1)
          concept=knowledge_base.Concept(options[rnd])
          if concept.get_gender()=='f':
@@ -53,7 +54,8 @@ class Answer:
             text="Es un "+options[rnd]
          return text
 
-      if sentence_info['relation'] == 'HAS':
+      if (sentence_info['question']=='que' and 
+          sentence_info["relation"]=="tener"):
          rnd=random.randint(0, len(options)-1)
          concept=knowledge_base.Concept(options[rnd])
          text="Tienen "+options[rnd]
@@ -61,7 +63,8 @@ class Answer:
 
 
 
-      if sentence_info['relation'] == 'HAS-ATTRIBUTE':
+      if (sentence_info['question']=='como' and 
+          sentence_info["relation"]=="ser"):
          rnd=random.randint(0, len(options)-1)
 
          for cnt in range(len(options)):

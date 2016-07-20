@@ -2,7 +2,7 @@
 import sys
 import sqlite3
 import logging
-
+from language.globals import IS_A_RELATION, HAS_ATTRIBUTE_RELATION
 
 class Concept:
 
@@ -157,7 +157,7 @@ class knowledge_base:
          cur = self.con.cursor()    
          cur.execute("select dst from relations_n2 "
             "where src='"+str(self.concept_id(src))+"' "
-            "and (relation='"+rel+"' or relation='IS-A');")
+            "and (relation='"+rel+"' or relation='"+IS_A_RELATION+"');")
 
          data=cur.fetchall()
          for r in data:
@@ -259,8 +259,8 @@ class knowledge_base:
          self.get_inherited_properties(src, rel, results)
 
          #When we receibe an IS-A question we add HAS-ATTRIBUTE. 
-         if rel=='IS-A':
-            self.get_inherited_properties(src, 'HAS-ATTRIBUTE', results)
+         if rel==IS_A_RELATION:
+            self.get_inherited_properties(src, HAS_ATTRIBUTE_RELATION, results)
 
          return results
 
