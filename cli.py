@@ -5,7 +5,7 @@ from manager.chatbot import chatbot
 
 if __name__ == '__main__':
 
-   cb=chatbot()
+   cb=chatbot(user='Usuario', lang='es')
 
    while True: 
       try:

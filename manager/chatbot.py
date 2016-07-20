@@ -15,9 +15,9 @@ import language.es.relations as relations
 class chatbot:
  
 	# {{{ __init__  
-   def __init__(self):
+   def __init__(self, user='MASTER', lang='es'):
       self.kb=knowledge_base.knowledge_base()
-      self.user=knowledge_base.User("Juan")
+      self.user=knowledge_base.User(user)
    # }}}
 
    # {{{ clean_memory()

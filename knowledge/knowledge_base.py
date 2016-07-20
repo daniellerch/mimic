@@ -79,12 +79,20 @@ class User:
 
       self.kb=knowledge_base()
 
+      # MASTER is a special user that can not be modified. This user is
+      # used to teach the system.
+      if name=='MASTER':
+         self.id=0
+         self.name='MASTER'
+         return
+
       try:
          cur = self.kb.con.cursor()    
          cur.execute("insert into users (name) values ('"+name+"');")
          id_user=cur.lastrowid
          self.kb.con.commit()
          self.id=id_user
+         self.name=name
 
       except sqlite3.Error, e:
          print e
@@ -92,13 +100,13 @@ class User:
          sys.exit(1)
    # }}}
 
-   # {{{ id()
-   def id(self):
-      return self.id
-   # }}}
-
    # {{{ set_name()
    def set_name(self, name):
+
+      if name=='MASTER':
+         self.id=0
+         self.name='MASTER'
+         return
 
       try:
          cur = self.kb.con.cursor()
@@ -106,6 +114,7 @@ class User:
          cur.execute("update users set name='"+name+"' \
                       where id='"+str(self.id)+"' and id!=0;")
          self.kb.con.commit()
+         self.name=name
 
       except sqlite3.Error, e:
          print e
@@ -169,9 +178,8 @@ class knowledge_base:
       try:
          cur = self.con.cursor()    
          cur.execute("delete from relations_n2;")
-         self.con.commit()
-         
          cur.execute("delete from concepts;")
+         cur.execute("delete from users where id!=0;")
          self.con.commit()
 
       except sqlite3.Error, e:
