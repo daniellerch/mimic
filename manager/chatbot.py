@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from knowledge.knowledge_base import knowledge_base
+import knowledge.knowledge_base as knowledge_base
 from language.es.answer import Answer
 from pattern.es import parsetree
 import language.es.pattern_utils as pattern_utils
@@ -16,7 +16,8 @@ class chatbot:
  
 	# {{{ __init__  
    def __init__(self):
-      self.kb=knowledge_base()
+      self.kb=knowledge_base.knowledge_base()
+      self.user=knowledge_base.User("Juan")
    # }}}
 
    # {{{ clean_memory()
@@ -44,8 +45,6 @@ class chatbot:
 
       if not sentence_info:
          return answer.get_unknown_command()
-
-
 
       if sentence_info.has_key('code') and sentence_info["code"]!=0:
          return sentence_info["error_message"]

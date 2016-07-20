@@ -71,6 +71,49 @@ class Concept:
       return self.gender
    # }}}
 
+
+class User:
+
+   # {{{ __init__()
+   def __init__(self, name):
+
+      self.kb=knowledge_base()
+
+      try:
+         cur = self.kb.con.cursor()    
+         cur.execute("insert into users (name) values ('"+name+"');")
+         id_user=cur.lastrowid
+         self.kb.con.commit()
+         self.id=id_user
+
+      except sqlite3.Error, e:
+         print e
+         print "Error %s:" % e.args[0]
+         sys.exit(1)
+   # }}}
+
+   # {{{ id()
+   def id(self):
+      return self.id
+   # }}}
+
+   # {{{ set_name()
+   def set_name(self, name):
+
+      try:
+         cur = self.kb.con.cursor()
+         # we do not want to overwrite MASTER, that is id=0
+         cur.execute("update users set name='"+name+"' \
+                      where id='"+str(self.id)+"' and id!=0;")
+         self.kb.con.commit()
+
+      except sqlite3.Error, e:
+         print e
+         print "Error %s:" % e.args[0]
+         sys.exit(1)
+   # }}}
+
+
 class knowledge_base:
 
    # {{{ __init__()
