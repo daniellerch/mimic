@@ -6,6 +6,6 @@ from manager.chatbot import chatbot
 
 if __name__ == '__main__':
 
-   cb=chatbot()
-   cb.clean_memory()
+    cb=chatbot()
+    cb.clean_memory()
 

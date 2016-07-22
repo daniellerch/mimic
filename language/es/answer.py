@@ -11,67 +11,67 @@ import random
 
 class Answer:
 
-   def __init__(self):
-       
-      self.ok_synonymous=[
-         u"De acuerdo",
-         u"Vale",
-         u"Genial!",
-         u"Muy bien",
-         u"Bien",
-         u"Perfecto",
-         u"Tomo nota",
-         u"Me lo apunto",
-         u"Estupendo",
-         u"Gracias por la información",
-         u"Interesante",
-         u"Muy instructivo",
-         u"Fantástico",
-         u"Que bien"]
+    def __init__(self):
+         
+        self.ok_synonymous=[
+            u"De acuerdo",
+            u"Vale",
+            u"Genial!",
+            u"Muy bien",
+            u"Bien",
+            u"Perfecto",
+            u"Tomo nota",
+            u"Me lo apunto",
+            u"Estupendo",
+            u"Gracias por la información",
+            u"Interesante",
+            u"Muy instructivo",
+            u"Fantástico",
+            u"Que bien"]
 
-   def get_unknown_command(self):
-      return u"No te he entendido. ¿Podrías reformular la frase?"
+    def get_unknown_command(self):
+        return u"No te he entendido. ¿Podrías reformular la frase?"
 
-   def get_internal_error(self):
-      return "Vaya, parece que tengo un problema interno"
+    def get_internal_error(self):
+        return "Vaya, parece que tengo un problema interno"
 
-   def get_ok_synonymous(self):
-      rnd=random.randint(0, len(self.ok_synonymous)-1)
-      return self.ok_synonymous[rnd]
+    def get_ok_synonymous(self):
+        rnd=random.randint(0, len(self.ok_synonymous)-1)
+        return self.ok_synonymous[rnd]
 
-   def get_question_reply(self, sentence_info, options):
+    def get_question_reply(self, sentence_info, options):
 
-      if len(options)==0:
-         return "No lo se"
+        if len(options)==0:
+            return "No lo se"
 
-      if (sentence_info['question']=='que' and 
-          sentence_info["relation"]=="ser"):
-         rnd=random.randint(0, len(options)-1)
-         concept=knowledge_base.Concept(options[rnd])
-         if concept.get_gender()=='f':
-            text="Es una "+options[rnd]
-         else:
-            text="Es un "+options[rnd]
-         return text
+        if (sentence_info['question']=='que' and 
+             sentence_info["relation"]=="ser"):
+            rnd=random.randint(0, len(options)-1)
+            concept=knowledge_base.Concept(options[rnd])
+            if concept.get_gender()=='f':
+                text="Es una "+options[rnd]
+            else:
+                text="Es un "+options[rnd]
+            return text
 
-      if (sentence_info['question']=='que' and 
-          sentence_info["relation"]=="tener"):
-         rnd=random.randint(0, len(options)-1)
-         concept=knowledge_base.Concept(options[rnd])
-         text="Tienen "+options[rnd]
-         return text
+        if (sentence_info['question']=='que' and 
+             sentence_info["relation"]=="tener"):
+            rnd=random.randint(0, len(options)-1)
+            concept=knowledge_base.Concept(options[rnd])
+            text="Tienen "+options[rnd]
+            return text
 
 
 
-      if (sentence_info['question']=='como' and 
-          sentence_info["relation"]=="ser"):
-         rnd=random.randint(0, len(options)-1)
+        if (sentence_info['question']=='como' and 
+             sentence_info["relation"]=="ser"):
+            rnd=random.randint(0, len(options)-1)
 
-         for cnt in range(len(options)):
-            if parsetree(options[cnt]).words[0].type[0:2]=='JJ':
-               return "Es "+options[cnt]
+            for cnt in range(len(options)):
+                if parsetree(options[cnt]).words[0].type[0:2]=='JJ':
+                    return "Es "+options[cnt]
 
-      return "No lo se"
+        return "No lo se"
 
 
 
