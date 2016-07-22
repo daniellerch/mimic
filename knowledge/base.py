@@ -157,21 +157,21 @@ class KnowledgeBase:
         self.con.close()
     # }}}
 
-    # {{{ get_inherited_properties():
-    # Inference based in inheritance: The idea of this is that if an concept 
-    # belongs to a class (indicated by an IS_A link) it inherits all the 
-    # properties of that class
-    def get_inherited_properties(self, src, rel, results):
+    # {{{ get_parent_concepts():
+    def get_parent_concepts(self, src, results=[]):
+        """Follow IS_A_RELATION links and prepare a list with all the parent
+        concepts. This list is useful because the child concepts inherit
+        the properties of the parents."""
         try:
             cur = self.con.cursor()     
             cur.execute("select dst from relations_n2 "
                 "where src='"+str(self.concept_id(src))+"' "
-                "and (relation='"+rel+"' or relation='"+IS_A_RELATION+"');")
-
+                "and relation='"+IS_A_RELATION+"';")
+    
             data=cur.fetchall()
             for r in data:
                 dst_name=self.concept_name(r["dst"])
-                self.get_inherited_properties(dst_name, rel, results)
+                self.get_parent_concepts(dst_name, results)
                 results.append(dst_name)
          
         except sqlite3.Error, e:
@@ -179,7 +179,30 @@ class KnowledgeBase:
             print "Error %s:" % e.args[0]
             sys.exit(1)
 
+        return results
+    # }}}
 
+    # {{{ get_properties():
+    def get_properties(self, src_list, rel):
+
+        src_sql = "('"+"' or '".join(src_list)+"')"
+        try:
+            cur = self.con.cursor()     
+            cur.execute("select dst from relations_n2 "
+                "where "+src_sql+" and relation='"+rel+"';")
+
+            data=cur.fetchall()
+            prop=[]
+            for r in data:
+                prop.append(self.concept_name(r["dst"]))
+            return prop         
+
+        except sqlite3.Error, e:
+            print e
+            print "Error %s:" % e.args[0]
+            sys.exit(1)
+
+        return None
     # }}}
 
     # {{{ clean()
@@ -262,21 +285,19 @@ class KnowledgeBase:
 
     # {{{ query_2n_relation()
     def query_2n_relation(self, rel, src): 
-        results=[]
-        try:
-            # IS-A relation is implicit in all relations. 
-            self.get_inherited_properties(src, rel, results)
+        
+        src_list = self.get_parent_concepts(src, results=[])
+        src_list.append(src)
+        result = list(src_list)
 
-            #When we receibe an IS-A question we add HAS-ATTRIBUTE. 
-            if rel==IS_A_RELATION:
-                self.get_inherited_properties(src, HAS_ATTRIBUTE_RELATION, results)
+        #When we receibe an IS-A question we add also HAS-ATTRIBUTE relation. 
+        if rel==IS_A_RELATION:
+            result += self.get_properties(src_list, HAS_ATTRIBUTE_RELATION)
 
-            return results
+        result += self.get_properties(result, rel)
 
-        except sqlite3.Error, e:
-            print e
-            print "Error %s:" % e.args[0]
-            sys.exit(1)
+        result.remove(src)
+        return result
     # }}}
 
 
