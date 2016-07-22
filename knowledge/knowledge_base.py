@@ -96,7 +96,8 @@ class Source:
 
         try:
             cur = self.kb.con.cursor()     
-            cur.execute("insert into users (name) values ('"+name+"');")
+            cur.execute("insert into knowledge_source \
+                         (name) values ('"+name+"');")
             id_user=cur.lastrowid
             self.kb.con.commit()
             self.id=id_user
@@ -119,8 +120,8 @@ class Source:
         try:
             cur = self.kb.con.cursor()
             # we do not want to overwrite MASTER, that is id=0
-            cur.execute("update users set name='"+name+"' \
-                             where id='"+str(self.id)+"' and id!=0;")
+            cur.execute("update knowledge_source set name='"+name+"' \
+                         where id='"+str(self.id)+"' and id!=0;")
             self.kb.con.commit()
             self.name=name
 
@@ -187,7 +188,7 @@ class knowledge_base:
             cur = self.con.cursor()     
             cur.execute("delete from relations_n2;")
             cur.execute("delete from concepts;")
-            cur.execute("delete from users where id!=0;")
+            cur.execute("delete from knowledge_source where id!=0;")
             self.con.commit()
 
         except sqlite3.Error, e:
@@ -245,7 +246,7 @@ class knowledge_base:
         try:
             cur = self.con.cursor()     
             cur.execute("insert into relations_n2 "
-                "(id_user, relation, src_quantifier, src, "
+                "(id_knowledge_source, relation, src_quantifier, src, "
                 " dst_quantifier, dst) values "
                 "('"+str(idu)+"','"+rel+"','"+src_q+"','"+str(src_id)+"', "
                 " '"+dst_q+"','"+str(dst_id)+"');"
