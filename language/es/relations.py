@@ -16,7 +16,6 @@ def process(sentence):
 
     Aq, An, Aprop = pattern_utils.parse_NP(m.group(1))
     Bq, Bn, Bprop = pattern_utils.parse_NP(m.group(3))
-    print "VP", m.group(2).string
 
     r=dict()
 

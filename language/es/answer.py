@@ -47,8 +47,11 @@ class Answer:
         if sentence_info['question']=='que':
             rnd=random.randint(0, len(options)-1)
             concept=knowledge_base.Concept(options[rnd])
-            #if concept.get_gender()=='f':
-            return options[rnd]
+            if concept.get_gender()=='f':
+                text = "Una "+options[rnd]
+            else:
+                text = "Un "+options[rnd]
+            return text
 
         if (sentence_info['question']=='como' and 
              sentence_info["relation"]=="ser"):
