@@ -44,22 +44,11 @@ class Answer:
         if len(options)==0:
             return "No lo se"
 
-        if (sentence_info['question']=='que' and 
-             sentence_info["relation"]=="ser"):
+        if sentence_info['question']=='que':
             rnd=random.randint(0, len(options)-1)
             concept=knowledge_base.Concept(options[rnd])
-            if concept.get_gender()=='f':
-                text="Es una "+options[rnd]
-            else:
-                text="Es un "+options[rnd]
-            return text
-
-        if (sentence_info['question']=='que' and 
-             sentence_info["relation"]=="tener"):
-            rnd=random.randint(0, len(options)-1)
-            concept=knowledge_base.Concept(options[rnd])
-            text="Tienen "+options[rnd]
-            return text
+            #if concept.get_gender()=='f':
+            return options[rnd]
 
         if (sentence_info['question']=='como' and 
              sentence_info["relation"]=="ser"):

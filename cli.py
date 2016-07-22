@@ -10,7 +10,6 @@ if __name__ == '__main__':
     while True: 
         try:
             human_input=raw_input("mimic #> ")
-            #.decode("utf-8")
             if len(human_input)==0:
                 continue
 

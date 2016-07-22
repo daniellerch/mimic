@@ -167,7 +167,6 @@ class KnowledgeBase:
             q = "select dst from relations_n2 " \
                 "where src='"+str(self.concept_id(src))+"' " \
                 "and relation='"+IS_A_RELATION+"';"
-            print q
             cur.execute(q)
     
             data=cur.fetchall()
@@ -194,7 +193,6 @@ class KnowledgeBase:
                 "from relations_n2 r, concepts c1, concepts c2 " \
                 "where "+src_sql+" and r.relation='"+rel+"' " \
                 "and r.src=c1.id and r.dst=c2.id;"
-            print q
             cur.execute(q)
 
             data=cur.fetchall()
