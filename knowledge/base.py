@@ -163,10 +163,12 @@ class KnowledgeBase:
         concepts. This list is useful because the child concepts inherit
         the properties of the parents."""
         try:
-            cur = self.con.cursor()     
-            cur.execute("select dst from relations_n2 "
-                "where src='"+str(self.concept_id(src))+"' "
-                "and relation='"+IS_A_RELATION+"';")
+            cur = self.con.cursor()
+            q = "select dst from relations_n2 " \
+                "where src='"+str(self.concept_id(src))+"' " \
+                "and relation='"+IS_A_RELATION+"';"
+            print q
+            cur.execute(q)
     
             data=cur.fetchall()
             for r in data:
@@ -185,16 +187,20 @@ class KnowledgeBase:
     # {{{ get_properties():
     def get_properties(self, src_list, rel):
 
-        src_sql = "('"+"' or '".join(src_list)+"')"
+        src_sql = "c1.name in ('"+"', '".join(src_list)+"')"
         try:
-            cur = self.con.cursor()     
-            cur.execute("select dst from relations_n2 "
-                "where "+src_sql+" and relation='"+rel+"';")
+            cur = self.con.cursor()
+            q = "select c2.name dst " \
+                "from relations_n2 r, concepts c1, concepts c2 " \
+                "where "+src_sql+" and r.relation='"+rel+"' " \
+                "and r.src=c1.id and r.dst=c2.id;"
+            print q
+            cur.execute(q)
 
             data=cur.fetchall()
             prop=[]
             for r in data:
-                prop.append(self.concept_name(r["dst"]))
+                prop.append(r["dst"])
             return prop         
 
         except sqlite3.Error, e:
@@ -291,13 +297,18 @@ class KnowledgeBase:
         result = list(src_list)
 
         #When we receibe an IS-A question we add also HAS-ATTRIBUTE relation. 
+        prop=[]
         if rel==IS_A_RELATION:
-            result += self.get_properties(src_list, HAS_ATTRIBUTE_RELATION)
+            prop = self.get_properties(src_list, HAS_ATTRIBUTE_RELATION)
 
-        result += self.get_properties(result, rel)
+        prop += self.get_properties(result, rel)
+        if rel==IS_A_RELATION:
+            prop += result
 
-        result.remove(src)
-        return result
+        if src in prop:
+            prop.remove(src)
+
+        return prop
     # }}}
 
 
