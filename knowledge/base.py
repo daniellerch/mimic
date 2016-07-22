@@ -9,7 +9,7 @@ class Concept:
     # {{{ __init__()
     def __init__(self, name):
 
-        self.kb=knowledge_base()
+        self.kb=KnowledgeBase()
 
         try:
             cur = self.kb.con.cursor()     
@@ -85,7 +85,7 @@ class Source:
     # {{{ __init__()
     def __init__(self, name):
 
-        self.kb=knowledge_base()
+        self.kb=KnowledgeBase()
 
         # MASTER is a special user that can not be modified. This user is
         # used to teach the system.
@@ -132,7 +132,7 @@ class Source:
     # }}}
 
 
-class knowledge_base:
+class KnowledgeBase:
 
     # {{{ __init__()
     def _dict_factory(self, cursor, row):

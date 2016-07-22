@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import knowledge.knowledge_base as knowledge_base
+import knowledge.base as knowledge_base
 from language.es.answer import Answer
 import language.es.pattern_utils as pattern_utils
 import language.es.greetings as greetings
@@ -15,7 +15,7 @@ class chatbot:
  
 	# {{{ __init__  
     def __init__(self, user='MASTER', lang='es'):
-        self.kb=knowledge_base.knowledge_base()
+        self.kb=knowledge_base.KnowledgeBase()
         u=knowledge_base.Source(user)
         self.id_user=u.id
         self.lang=lang

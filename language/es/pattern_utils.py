@@ -199,7 +199,7 @@ from pattern.es import MALE, FEMALE
 from random import randint
 from pattern.text.tree import Text
 
-from knowledge.knowledge_base import Concept
+from knowledge.base import Concept
 
 
 # {{{ pattern_match()

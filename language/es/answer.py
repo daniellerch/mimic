@@ -6,7 +6,7 @@ from pattern.es import parsetree, parse
 from pattern.es import conjugate, lemma, lexeme, tenses
 from pattern.es import singularize, pluralize, attributive, MALE, SINGULAR
 from pattern.es import MALE, FEMALE
-from knowledge import knowledge_base
+import knowledge.base as knowledge_base
 import random
 
 class Answer:

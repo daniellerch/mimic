@@ -9,4 +9,5 @@ default:
 clean:
 	rm -f cli.c learn.c *.bin
 	rm -f */*.pyc */*/*.pyc
+	rm -fr __pycache__ */__pycache__ */*/__pycache__
 
