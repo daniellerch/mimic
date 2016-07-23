@@ -202,6 +202,14 @@ from pattern.text.tree import Text
 from knowledge.base import Concept
 
 
+male_words=["el", "un", "uno", "unos", "los", "todos", "algunos", "algun"]
+female_words=["la", "una", "unas", "las", "todas", "algunas", "alguna"]
+
+singular_words=["el", "un", "uno", "la", "una", "alguna", "algun"]
+plural_words=["unas", "las", "todas", "algunas", "unos", "los", "todos", 
+              "algunos"]
+
+
 # {{{ pattern_match()
 def pattern_match(pattern, sentence):
 
@@ -219,8 +227,6 @@ def pattern_match(pattern, sentence):
 # {{{ learn_gender()
 def learn_gender(dt, noun):
     
-    male_words=["el", "un", "uno", "unos", "los", "todos", "algunos", "algun"]
-    female_words=["la", "una", "unas", "las", "todas", "algunas", "alguna"]
 
     
     concept=Concept(noun)
@@ -243,163 +249,51 @@ def Word_list_to_Text(Word_list):
     return parsetree(string)
 # }}}
 
-# {{{ get_quantifier_from_NN_JJ()
-def get_quantifier_from_NN_JJ(noun):
-    if noun==singularize(noun):
-        return "one"
-    elif noun==pluralize(noun):
-        return "all"
-    else:
-        print "ERROR: get_quantifier_from_NN_JJ():", noun, "!=", \
-            singularize(noun), pluralize(noun)
-        sys.exit(0)
-# }}}
- 
-# {{{ get_quantifier_from_DT()
-def get_quantifier_from_DT(dt):  
-    if dt.lower() in ["el", "la", "lo", "un", "uno", "una"]:
-        return "one"
-    elif dt.lower() in ["los", "las", "todos", "todas"]:
-        return "all"
-    elif dt.lower() in ["algun", "alguna", "algunos", "algunas", 
-        "unos", "unas"]:
-        return "exist"
-    else:
-        print "ERROR: get_quantifier_from_DT(): unknown DT '"+str(dt.lower())+"'"
-        sys.exit(0)
-# }}}
-
-# {{{ get_quantifier_from_IN()
-def get_quantifier_from_IN(dt):  
-    if dt.lower() in ["a"]:
-        return "one"
-    else:
-        print "ERROR: get_quantifier_from_IN(): unknown DT '"+str(dt.lower())+"'"
-        sys.exit(0)
-# }}}
-
 # {{{ parse_NP()
 def parse_NP(words):
-    quantifier=""
+    number="s"
     noun=""
-    properties=[]
     gender='m'
 
     t=Word_list_to_Text(words)
 
-    
-    #NP     noun phrase     DT+RB+JJ+NN + PR      the strange bird
-
-
     # Example: todos los perros
     m=pattern_match("{DT} {DT} {JJ*|NN*}", t)
     if m and len(m)==len(t.words):
-        noun = singularize(m.group(3)[0].string)
-        quantifier=get_quantifier_from_DT(m.group(1)[0].string)
         learn_gender(m.group(2)[0].string, noun)
-        return quantifier, gender, noun, properties
+        noun = singularize(m.group(3)[0].string)
+        if m.group(2)[0].string in plural_words:
+            number='p'
+        if m.group(2)[0].string in female_words:
+            gender='f'
+        return number, gender, noun
 
     # Example: el perro
     m=pattern_match("{DT} {JJ*|NN*}", t)
     if m and len(m)==len(t.words):
         noun = singularize(m.group(2)[0].string)
-        quantifier=get_quantifier_from_DT(m.group(1)[0].string)
         learn_gender(m.group(1)[0].string, noun)
-        return quantifier, gender, noun, properties
+        if m.group(1)[0].string in plural_words:
+            number='p'
+        if m.group(1)[0].string in female_words:
+            gender='f'
+        return number, gender, noun
 
     # Example: verde
     m=pattern_match("{JJ*|NN*}", t)
     if m and len(m)==len(t.words):
         noun=m.group(1)[0].string
-        quantifier="one"
         if noun==pluralize(noun):
-            quantifier="all"
+            number="p"
         noun = singularize(noun)
-     
-        return quantifier, gender, noun, properties
+        
+        # TODO: gender     
+
+        return number, gender, noun
 
     print "parse_NP() : not found", t
     sys.exit(0)
 
-
-    """
-    # NNP
-    if len(words)==1 and \
-        words[0].tag[:3]=="NNP":
-        noun = singularize(words[0].string)
-        quantifier="one"
-
-    # NN
-    elif len(words)==1 and \
-        (words[0].tag[:2]=="NN" or words[0].tag[:2]=="JJ"):
-        noun = singularize(words[0].string)
-        quantifier=get_quantifier_from_NN_JJ(words[0].string)
-     
-    # DT + NN
-    elif len(words)==2 and \
-          words[0].tag=="DT" and \
-          words[1].tag[:2]=="NN":
-        noun = singularize(words[1].string)
-        quantifier=get_quantifier_from_DT(words[0].string)             
-
-    # IN + NN
-    elif len(words)==2 and \
-          words[0].tag=="IN" and \
-          words[1].tag[:2]=="NN":
-        noun = singularize(words[1].string)
-        quantifier=get_quantifier_from_IN(words[0].string)             
-
-    # DT + JJ
-    elif len(words)==2 and \
-          words[0].tag=="DT" and \
-          words[1].tag[:2]=="JJ":
-        noun = singularize(words[1].string)
-        quantifier=get_quantifier_from_DT(words[0].string)             
-
-    # DT + NN + NN
-    elif len(words)==3 and \
-          words[0].tag=="DT" and \
-          words[1].tag[:2]=="NN" and \
-          words[2].tag[:2]=="NN":
-        noun = singularize(words[1].string)
-        quantifier=get_quantifier_from_DT(words[0].string)             
-        # TODO: process composite nouns: NN+NN
-
-    # DT + NN + JJ
-    elif len(words)==3 and \
-          words[0].tag=="DT" and \
-          words[1].tag[:2]=="NN" and \
-          words[2].tag[:2]=="JJ": 
-        noun = singularize(words[1].string)
-        quantifier=get_quantifier_from_DT(words[0].string)             
-        # TODO: process JJ
-
-    # DT + DT + NN
-    elif len(words)==3 and \
-          words[0].tag=="DT" and \
-          words[1].tag=="DT" and \
-          words[2].tag[:2]=="NN":
-        noun = singularize(words[2].string)
-        quantifier=get_quantifier_from_DT(words[0].string)
-
-    # DT + NN + IN + NN
-    elif len(words)==4 and \
-          words[0].tag=="DT" and \
-          words[1].tag[:2]=="NN" and \
-          words[2].tag[:2]=="IN" and \
-          words[3].tag[:2]=="NN":
-        noun = singularize(words[1].string)
-        quantifier=get_quantifier_from_DT(words[0].string)             
-        # TODO: process composite nouns: NN+IN+NN
-
-
-    else:
-        print "ERROR: parse_NP(): not found!"
-        print words
-        sys.exit(0)
-    """
-
-    return quantifier, noun, properties
 # }}}
 
 # {{{ sentence_pre_processing()

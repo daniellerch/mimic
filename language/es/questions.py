@@ -9,24 +9,24 @@ def process(sentence):
     t = parsetree(sentence, lemmata=True)
     m=pattern_utils.pattern_match("que {VP} {NP}", t)
     if m:
-        q, g, n, p = pattern_utils.parse_NP(m.group(2))
+        n, g, noun = pattern_utils.parse_NP(m.group(2))
         r=dict()
         r['type']='query'
         r['question']='que'
         r["relation"]=conjugate(m.group(1).string, INFINITIVE)
         r['gender']=g
-        r['object']=n
+        r['object']=noun
         return r
 
     m=pattern_utils.pattern_match("como {VP} {NP}", t)
     if m:
-        q, g, n, p = pattern_utils.parse_NP(m.group(2))
+        n, g, noun = pattern_utils.parse_NP(m.group(2))
         r=dict()
         r['type']='query'
         r['question']='como'
         r["relation"]=conjugate(m.group(1).string, INFINITIVE)
         r['gender']=g
-        r['object']=n
+        r['object']=noun
         return r
 
     return None
