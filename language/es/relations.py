@@ -14,8 +14,8 @@ def process(sentence):
     if not m:
         return None
 
-    Aq, An, Aprop = pattern_utils.parse_NP(m.group(1))
-    Bq, Bn, Bprop = pattern_utils.parse_NP(m.group(3))
+    Aq, Ag, An, Aprop = pattern_utils.parse_NP(m.group(1))
+    Bq, Bg, Bn, Bprop = pattern_utils.parse_NP(m.group(3))
 
     r=dict()
 
@@ -30,6 +30,8 @@ def process(sentence):
     r["source"]=An
     r["destination_quantifier"]=Bq
     r["destination"]=Bn
+    r['source_gender']=Ag
+    r['destination_gender']=Bg
     r["relation"]=conjugate(m.group(2).string, INFINITIVE)
 
 

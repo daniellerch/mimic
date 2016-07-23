@@ -39,8 +39,8 @@ class chatbot:
         sentence=pattern_utils.sentence_pre_processing(sentence)
 
         sentence_info = ( greetings.process(sentence) or
-                                questions.process(sentence) or
-                                relations.process(sentence) )
+                          questions.process(sentence) or
+                          relations.process(sentence) )
 
         if not sentence_info:
             return answer.get_unknown_command()
@@ -50,7 +50,7 @@ class chatbot:
 
         if sentence_info["type"]=="relation":
             self.kb.add_2n_relation(
-                self.id_user,     
+                self.id_user,
                 sentence_info["relation"], 
                 sentence_info["source_quantifier"], 
                 sentence_info["source"], 
