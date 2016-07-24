@@ -45,9 +45,6 @@ class chatbot:
         if not sentence_info:
             return answer.get_unknown_command()
 
-        if sentence_info.has_key('code') and sentence_info["code"]!=0:
-            return sentence_info["error_message"]
-
         if sentence_info["type"]=="relation":
             self.kb.add_2n_relation(
                 self.id_user,

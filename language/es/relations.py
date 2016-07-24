@@ -19,7 +19,6 @@ def process(sentence):
 
     r=dict()
 
-    r['code']=0
     r["type"]="relation"
     r["source_quantifier"]=An
     r["source"]=Anoun

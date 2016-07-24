@@ -15,7 +15,6 @@ def process(sentence):
     greeting_list_a=["hola", "buenas"]
     if greeting.lower() in greeting_list_q:
         r=dict()
-        r['code']=0
         r['type']='direct_answer'
         r['message']=greeting_list_a[randint(0,len(greeting_list_a)-1)]
         return r
@@ -25,7 +24,6 @@ def process(sentence):
     greeting_list_a=["Estoy bien, gracias por preguntar"]
     if greeting.lower() in greeting_list_q:
         r=dict()
-        r['code']=0
         r['type']='direct_answer'
         r['message']=greeting_list_a[randint(0,len(greeting_list_a)-1)]
         return r
@@ -34,7 +32,6 @@ def process(sentence):
     greeting_list_a=["hola", "buenas"]
     if greeting.lower() in greeting_list_q:
         r=dict()
-        r['code']=0
         r['type']='direct_answer'
         r['message']=greeting_list_a[randint(0,len(greeting_list_a)-1)]
         return r
